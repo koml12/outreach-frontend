@@ -1,5 +1,9 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Getting Setup
++ Install npm and NodeJS https://docs.microsoft.com/en-us/windows/nodejs/setup-on-wsl2
++ When you `cd` into the project directory (with the `package.json` file), run `npm install` before you start so you can update your dependencies if anything changed
+
 ## Available Scripts
 
 In the project directory, you can run:
