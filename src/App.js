@@ -1,7 +1,9 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-import{ Login, Register } from "./Components/Login/index";
+import React from "react";
+import logo from "./logo.svg";
+import "./App.css";
+import { Login, Register } from "./components/Login/index";
+import { Header, Footer } from "./components/common";
+import Toolbar from "@material-ui/core/Toolbar";
 
 class App extends React.Component {
   constructor(props) {
@@ -34,6 +36,8 @@ class App extends React.Component {
     const currentActive = isLogginActive ? "login" : "register";
     return (
       <div className="App">
+        <Header company="Company Name" />
+        <Toolbar />
         <div className="login">
           <div className="container" ref={ref => (this.container = ref)}>
             {isLogginActive && (
@@ -50,6 +54,7 @@ class App extends React.Component {
             onClick={this.changeState.bind(this)}
           />
         </div>
+        <Footer />
       </div>
     );
   }
@@ -58,12 +63,12 @@ class App extends React.Component {
 const RightSide = props => {
   return (
     <div
-      className = "right-side"
-      ref = {props.containerRef}
-      onClick = {props.onClick}
+      className="right-side"
+      ref={props.containerRef}
+      onClick={props.onClick}
     >
-      <div className = "inner-container">
-        <div className = "text">{props.current}</div>
+      <div className="inner-container">
+        <div className="text">{props.current}</div>
       </div>
     </div>
   );
