@@ -97,8 +97,8 @@ class EventRegistration extends Component {
   }
 
   saveAuthToken(token) {
-    localStorage.setItem("token", token);
-    localStorage.setItem("type", "candidate");
+    sessionStorage.setItem("token", token);
+    sessionStorage.setItem("type", "candidate");
   }
 
   generateErrorMessage() {
