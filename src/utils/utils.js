@@ -5,6 +5,9 @@ const userIsLoggedIn = () => {
 };
 
 const generateDateString = rawDateString => {
+  if (rawDateString === null) {
+    return "";
+  }
   return dayjs(rawDateString).format("dddd, MMMM D, YYYY, h:mmA");
 };
 
