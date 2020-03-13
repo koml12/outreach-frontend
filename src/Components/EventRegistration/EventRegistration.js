@@ -4,6 +4,7 @@ import Login from "./Login";
 import RegistrationSwitch from "./RegistrationSwitch";
 import ErrorMessage from "./ErrorMessage";
 import EventInfo from "./EventInfo";
+import EventNotFound from "./EventNotFound";
 import axios from "axios";
 import { Redirect } from "react-router-dom";
 import { userIsLoggedIn } from "../../utils/utils";
@@ -13,10 +14,10 @@ class EventRegistration extends Component {
     super(props);
     this.state = {
       event: {
-        name: "",
+        name: "Loading Event Info...",
         description: "",
-        startDatetime: new Date(),
-        endDatetime: new Date()
+        startDatetime: null,
+        endDatetime: null
       },
       registrationInfo: {},
       loginInfo: {},
@@ -34,8 +35,16 @@ class EventRegistration extends Component {
 
   componentDidMount() {
     axios
-      .get("http://localhost:8000/events/" + this.props.match.params.eventId)
-      .then(response => this.setState({ event: response.data }));
+      .get("http://localhost:8000/api/event/" + this.props.match.params.eventId)
+      .then(response => {
+        let { event } = { ...this.state };
+        event.name = response.data["Event Name"];
+        event.description = response.data["Description"];
+        event.startDatetime = new Date(response.data["Start Time"]);
+        event.endDatetime = new Date(response.data["End Time"]);
+        this.setState({ event });
+      })
+      .catch(() => this.setState({ event: null }));
   }
 
   handleRegisteredInputChange(event) {
@@ -46,23 +55,26 @@ class EventRegistration extends Component {
 
   handleRegisterClicked() {
     axios({
-      url: `http://localhost:8000/api/register/${this.props.match.params.eventId}/`,
+      url: `http://localhost:8000/api/registration/`,
       method: "post",
-      data: this.createCandidateInfo(this.state.registrationInfo)
+      data: this.createRegistrationInfo(this.state.registrationInfo, this.props.match.params.eventId)
     }).then(response => {
       this.saveAuthToken(response.data.token);
       this.setState({ isLoggedIn: true });
     });
   }
 
-  createCandidateInfo(registrationInfo) {
+  createRegistrationInfo(registrationInfo, eventId) {
+    let registrationData = {};
     let candidateInfo = {};
     candidateInfo["first_name"] = registrationInfo["first_name"];
     candidateInfo["last_name"] = registrationInfo["last_name"];
     candidateInfo["email"] = registrationInfo["email"];
-    candidateInfo["Phone Number"] = registrationInfo["Phone Number"];
+    candidateInfo["phone_number"] = registrationInfo["Phone Number"];
     candidateInfo["password"] = registrationInfo["password"];
-    return candidateInfo;
+    registrationData["candidate"] = candidateInfo;
+    registrationData["event"] = eventId;
+    return registrationData;
   }
 
   handleLogInInputChange(event) {
@@ -73,7 +85,7 @@ class EventRegistration extends Component {
 
   handleLogInClicked() {
     axios({
-      url: "http://localhost:8000/api/login",
+      url: "http://localhost:8000/api/login/",
       method: "post",
       data: this.state.loginInfo
     })
@@ -97,8 +109,8 @@ class EventRegistration extends Component {
   }
 
   saveAuthToken(token) {
-    localStorage.setItem("token", token);
-    localStorage.setItem("type", "candidate");
+    sessionStorage.setItem("token", token);
+    sessionStorage.setItem("type", "candidate");
   }
 
   generateErrorMessage() {
@@ -111,17 +123,23 @@ class EventRegistration extends Component {
     }
     return (
       <div>
-        <EventInfo event={this.state.event} />
-        {this.state.showRegistration ? (
-          <Register onInputChange={this.handleRegisteredInputChange} onRegister={this.handleRegisterClicked} />
+        {this.state.event === null ? (
+          <EventNotFound />
         ) : (
-          <Login onInputChange={this.handleLogInInputChange} onLogIn={this.handleLogInClicked} />
+          <div>
+            <EventInfo event={this.state.event} />
+            {this.state.showRegistration ? (
+              <Register onInputChange={this.handleRegisteredInputChange} onRegister={this.handleRegisterClicked} />
+            ) : (
+              <Login onInputChange={this.handleLogInInputChange} onLogIn={this.handleLogInClicked} />
+            )}
+            {this.state.showErrorMessage ? <ErrorMessage message={this.generateErrorMessage()} /> : null}
+            <RegistrationSwitch
+              isRegistering={this.state.showRegistration}
+              onRegisterSwitch={this.handleRegistrationSwitch}
+            />
+          </div>
         )}
-        {this.state.showErrorMessage ? <ErrorMessage message={this.generateErrorMessage()} /> : null}
-        <RegistrationSwitch
-          isRegistering={this.state.showRegistration}
-          onRegisterSwitch={this.handleRegistrationSwitch}
-        />
       </div>
     );
   }
