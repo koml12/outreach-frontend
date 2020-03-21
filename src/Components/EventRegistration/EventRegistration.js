@@ -59,7 +59,7 @@ class EventRegistration extends Component {
       method: "post",
       data: this.createRegistrationInfo(this.state.registrationInfo, this.props.match.params.eventId)
     }).then(response => {
-      this.saveAuthToken(response.data.token);
+      this.saveAuthToken(response.data.token, response.data.id);
       this.setState({ isLoggedIn: true });
     });
   }
@@ -92,7 +92,7 @@ class EventRegistration extends Component {
       .then(response => {
         console.log(response.data);
         if (response.status === 200) {
-          this.saveAuthToken(response.data.token);
+          this.saveAuthToken(response.data.token, response.data.id);
           this.setState({ isLoggedIn: true });
         }
       })
@@ -108,9 +108,10 @@ class EventRegistration extends Component {
     }));
   }
 
-  saveAuthToken(token) {
+  saveAuthToken(token, id) {
     sessionStorage.setItem("token", token);
     sessionStorage.setItem("type", "candidate");
+    sessionStorage.setItem("userId", id);
   }
 
   generateErrorMessage() {
