@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import SignUpStepper from "./SignUpStepper";
 import StepNavigation from "./StepNavigation";
+import ResumeUpload from "../ResumeUpload";
 
 class EventSignUp extends Component {
   constructor(props) {
@@ -15,6 +16,7 @@ class EventSignUp extends Component {
     this.setStepComplete = this.setStepComplete.bind(this);
     this.onStepIncrement = this.onStepIncrement.bind(this);
     this.onStepDecrement = this.onStepDecrement.bind(this);
+    this.renderSignUpStep = this.renderSignUpStep.bind(this);
   }
 
   setActiveStep(step) {
@@ -38,6 +40,14 @@ class EventSignUp extends Component {
     this.setState({ activeStep });
   }
 
+  renderSignUpStep() {
+    if (this.state.activeStep === 0) {
+      return <ResumeUpload />;
+    } else {
+      return null;
+    }
+  }
+
   render() {
     return (
       <div>
@@ -47,6 +57,8 @@ class EventSignUp extends Component {
           activeStep={this.state.activeStep}
           onStepClicked={this.setActiveStep}
         />
+
+        {this.renderSignUpStep()}
 
         <StepNavigation
           activeStep={this.state.activeStep}
