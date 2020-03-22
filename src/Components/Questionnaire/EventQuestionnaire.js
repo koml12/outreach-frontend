@@ -24,11 +24,6 @@ class EventQuestionnaire extends Component {
     render(){
         Survey.StylesManager.applyTheme("darkblue");
 
-        var questionnaireValueChanged = function(sender, options){
-            var el = document.getElementById(options.name);
-            if(el) el.value = options.value;
-        }
-
         var json = {
             questions: getQuestionnaire(this.state.eventId)};
 
