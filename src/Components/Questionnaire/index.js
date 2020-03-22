@@ -1,3 +1,5 @@
-import QuestionReader from "./QuestionReader";
+import EventQuestionnaire from "./EventQuestionnaire";
+import EventSurvey from "./EventSurvey";
 
-export default QuestionReader;
+export default EventSurvey;
+export default EventQuestionnaire;

@@ -4,7 +4,8 @@ import { Header, Footer } from "./components/common";
 import { Switch, Route } from "react-router-dom";
 import EventRegistration from "./components/EventRegistration";
 import EventDashboard from "./components/EventDashboard";
-import QuestionReader from "./components/Questionnaire/QuestionReader";
+import EventQuestionnaire from "./components/Questionnaire/EventQuestionnaire";
+import EventSurvey from "./components/Questionnaire/EventSurvey";
 
 import Toolbar from "@material-ui/core/Toolbar";
 import Container from "@material-ui/core/Container";
@@ -21,7 +22,8 @@ class App extends React.Component {
           <Switch>
             <Route exact path="/events/:eventId/login" component={EventRegistration} />
             <Route exact path="/events/:eventId/" component={EventDashboard} />
-            <Route exact path="/events/:eventId/" component={QuestionReader}/>
+            <Route exact path="/events/:eventId/questionnaire" component={EventQuestionnaire}/>
+            <Route exact path="/events/:eventId/survey" component={EventSurvey} />
           </Switch>
         </Container>
         <Footer />
