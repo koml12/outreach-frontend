@@ -8,15 +8,17 @@ const SignUpStepper = props => {
     props.onStepClicked(index);
   };
 
-  const isStepComplete = index => () => {
+  const isStepComplete = index => {
     return props.completedSteps.includes(index);
   };
 
   return (
     <Stepper activeStep={props.activeStep} alternativeLabel nonLinear>
       {props.steps.map((step, index) => (
-        <Step key={index} completed={isStepComplete(index)}>
-          <StepButton onClick={handleStepClick(index)}>{step}</StepButton>
+        <Step key={index}>
+          <StepButton completed={isStepComplete(index)} onClick={handleStepClick(index)}>
+            {step}
+          </StepButton>
         </Step>
       ))}
     </Stepper>
