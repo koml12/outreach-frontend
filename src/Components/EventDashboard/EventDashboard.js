@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import { userIsLoggedIn } from "../../utils/utils.js";
+import EventSignUp from "./EventSignUp";
 
 export default class EventDashboard extends Component {
   constructor(props) {
@@ -16,7 +17,7 @@ export default class EventDashboard extends Component {
     } else {
       return (
         <div>
-          <h1>This is the event dashboard</h1>
+          <EventSignUp />
         </div>
       );
     }
