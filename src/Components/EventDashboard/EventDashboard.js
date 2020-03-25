@@ -17,7 +17,7 @@ export default class EventDashboard extends Component {
     } else {
       return (
         <div>
-          <EventSignUp />
+          <EventSignUp eventId={this.state.eventId} />
         </div>
       );
     }

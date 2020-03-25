@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import SignUpStepper from "./SignUpStepper";
 import StepNavigation from "./StepNavigation";
 import ResumeUpload from "../ResumeUpload";
+import { EventQuestionnaire } from "../Questionnaire";
 
 class EventSignUp extends Component {
   constructor(props) {
@@ -43,6 +44,8 @@ class EventSignUp extends Component {
   renderSignUpStep() {
     if (this.state.activeStep === 0) {
       return <ResumeUpload />;
+    } else if (this.state.activeStep === 1) {
+      return <EventQuestionnaire eventId={this.props.eventId} onComplete={() => this.setStepComplete(1)} />;
     } else {
       return null;
     }
