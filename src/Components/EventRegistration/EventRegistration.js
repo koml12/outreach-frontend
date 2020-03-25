@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Register from "./Register";
 import Login from "./Login";
 import RegistrationSwitch from "./RegistrationSwitch";
-import ErrorMessage from "./ErrorMessage";
+import { ErrorMessage } from "../common";
 import EventInfo from "./EventInfo";
 import EventNotFound from "./EventNotFound";
 import axios from "axios";

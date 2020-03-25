@@ -1,8 +1,15 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
+import Divider from "@material-ui/core/Divider";
 
 const useStyles = makeStyles({
+  root: {
+    marginTop: "5%"
+  },
+  divider: {
+    marginBottom: "5%"
+  },
   next: {
     float: "right"
   },
@@ -30,7 +37,8 @@ const StepNavigation = props => {
   };
 
   return (
-    <div>
+    <div className={classes.root}>
+      <Divider className={classes.divider} />
       <Button
         variant="contained"
         disabled={!shouldEnablePreviousButton()}
@@ -40,6 +48,12 @@ const StepNavigation = props => {
         Previous
       </Button>
 
+      {shouldRenderFinishButton() && (
+        <Button variant="contained" color="primary" className={classes.finish} onClick={props.onFinishClicked}>
+          Finish
+        </Button>
+      )}
+
       <Button
         variant="contained"
         disabled={!shouldEnableNextButton()}
@@ -48,12 +62,6 @@ const StepNavigation = props => {
       >
         Next
       </Button>
-
-      {shouldRenderFinishButton() && (
-        <Button variant="contained" color="primary" className={classes.finish} onClick={props.onFinishClicked}>
-          Finish
-        </Button>
-      )}
     </div>
   );
 };

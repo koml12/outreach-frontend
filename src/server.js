@@ -1,9 +1,14 @@
-import { Server } from "miragejs";
+import { Server, Response } from "miragejs";
 const makeServer = () => {
   return new Server({
-    urlPrefix: "https://localhost:8000/",
+    urlPrefix: "http://localhost:8000/",
 
-    routes() {}
+    routes() {
+      this.post("http://localhost:8000/resume", (schema, request) => {
+        console.log(request.data);
+        return new Response(201);
+      });
+    }
   });
 };
 
