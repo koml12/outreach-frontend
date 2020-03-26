@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import Register from "./Register";
-import Login from "./Login";
+import { Register, Login } from "../common";
 import RegistrationSwitch from "./RegistrationSwitch";
 import { ErrorMessage } from "../common";
 import EventInfo from "./EventInfo";
