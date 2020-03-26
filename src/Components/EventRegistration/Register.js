@@ -40,14 +40,9 @@ const Register = props => {
       <Grid item xs={3} />
 
       <Grid item xs={3} />
-      <Grid item xs={3}>
+      <Grid item xs={9}>
         <TextField id="standard-basic" label="Email" name="email" onChange={props.onInputChange} />
       </Grid>
-
-      <Grid item xs={3}>
-        <TextField id="standard-basic" label="Username" name="username" onChange={props.onInputChange} />
-      </Grid>
-      <Grid item xs={3} />
 
       <Grid item xs={3} />
       <Grid item xs={9}>

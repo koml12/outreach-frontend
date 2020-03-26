@@ -17,7 +17,7 @@ const Login = props => (
 
     <Grid item xs={3} />
     <Grid item xs={9}>
-      <TextField id="standard-basic" name="password" label="Password" onChange={props.onInputChange} />
+      <TextField id="standard-basic" name="password" type="password" label="Password" onChange={props.onInputChange} />
     </Grid>
 
     <Grid item xs={3} />
