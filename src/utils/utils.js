@@ -1,7 +1,11 @@
 import dayjs from "dayjs";
 
-const userIsLoggedIn = () => {
-  return sessionStorage.getItem("token") !== null && sessionStorage.getItem("type") !== null;
+const userIsLoggedIn = expectedType => {
+  return (
+    sessionStorage.getItem("token") !== null &&
+    sessionStorage.getItem("type") !== null &&
+    sessionStorage.getItem("type") === expectedType
+  );
 };
 
 const generateDateString = rawDateString => {
