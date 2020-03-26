@@ -22,7 +22,7 @@ class EventRegistration extends Component {
       loginInfo: {},
       showRegistration: true,
       showErrorMessage: false,
-      isLoggedIn: userIsLoggedIn()
+      isLoggedIn: userIsLoggedIn("Candidate")
     };
     this.handleRegisteredInputChange = this.handleRegisteredInputChange.bind(this);
     this.handleRegisterClicked = this.handleRegisterClicked.bind(this);
@@ -90,9 +90,11 @@ class EventRegistration extends Component {
     })
       .then(response => {
         console.log(response.data);
-        if (response.status === 200) {
-          this.saveAuthToken(response.data.token, response.data.id);
+        if (response.status === 200 && response.data["user_type"] === "Candidate") {
+          this.saveAuthToken(response.data.token, "Candidate", response.data.id);
           this.setState({ isLoggedIn: true });
+        } else {
+          this.setState({ showErrorMessage: true });
         }
       })
       .catch(error => {
@@ -107,9 +109,9 @@ class EventRegistration extends Component {
     }));
   }
 
-  saveAuthToken(token, id) {
+  saveAuthToken(token, userType, id) {
     sessionStorage.setItem("token", token);
-    sessionStorage.setItem("type", "candidate");
+    sessionStorage.setItem("type", userType);
     sessionStorage.setItem("userId", id);
   }
 
