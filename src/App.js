@@ -8,6 +8,8 @@ import EventQuestionnaire from "./components/Questionnaire/EventQuestionnaire";
 import EventSurvey from "./components/Questionnaire/EventSurvey";
 import CompanyLogin from "./components/company/CompanyLogin";
 import CompanyDashboard from "./components/company/CompanyDashboard";
+import EvaluatorDashboard from "./components/company/EvaluatorDashboard";
+import EvaluatorSurvey from "./components/company/EvaluatorSurvey";
 
 import Toolbar from "@material-ui/core/Toolbar";
 import Container from "@material-ui/core/Container";
@@ -23,6 +25,8 @@ class App extends React.Component {
         <Container>
           <Switch>
             <Route exact path="/" component={CompanyDashboard} />
+            <Route exact path="/evaluator" component={EvaluatorDashboard} />
+            <Route exact path="/evaluator/events/:eventId" component={EvaluatorSurvey} />
             <Route exact path="/login" component={CompanyLogin} />
             <Route exact path="/events/:eventId/login" component={EventRegistration} />
             <Route exact path="/events/:eventId/" component={EventDashboard} />

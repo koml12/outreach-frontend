@@ -1,12 +1,17 @@
 import React from "react";
 import { Redirect } from "react-router-dom";
-import { userIsLoggedIn } from "../../../utils/utils";
+import { userIsLoggedIn, getUserType } from "../../../utils/utils";
+import EvaluatorDashboard from "../EvaluatorDashboard";
 
 const CompanyDashboard = () => {
-  if (!userIsLoggedIn("Evaluator")) {
+  if (!userIsLoggedIn("Evaluator") && !userIsLoggedIn("HR")) {
     return <Redirect to="/login" />;
   } else {
-    return <h1>This is the company dashboard</h1>;
+    return getUserType() === "Evaluator" ? (
+      <Redirect to="/evaluator" />
+    ) : (
+      <h1>This is the HR dashboard (not implemented yet!)</h1>
+    );
   }
 };
 

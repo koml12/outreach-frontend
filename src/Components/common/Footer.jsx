@@ -16,7 +16,7 @@ const Footer = () => {
   const classes = useStyles();
   return (
     <Typography variant="body2" className={classes.footer}>
-      Brought to you by Outreach.
+      Brought to you by OutRecruit.
     </Typography>
   );
 };

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Register, Login } from "../common";
 import RegistrationSwitch from "./RegistrationSwitch";
 import { ErrorMessage } from "../common";
-import EventInfo from "./EventInfo";
+import EventInfo from "../common/EventInfo";
 import EventNotFound from "./EventNotFound";
 import axios from "axios";
 import { Redirect } from "react-router-dom";
