@@ -2,6 +2,7 @@ import React from "react";
 import "./App.css";
 import { Header, Footer } from "./components/common";
 import { Switch, Route } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import EventRegistration from "./components/EventRegistration";
 import EventDashboard from "./components/EventDashboard";
 import EventQuestionnaire from "./components/Questionnaire/EventQuestionnaire";
@@ -20,9 +21,9 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <Header company="Company Name" />
-        <Toolbar />
         <Container>
+          <Header company="Company Name" loggedIn={!this.props.location.pathname.endsWith("login")} />
+          <Toolbar />
           <Switch>
             <Route exact path="/" component={CompanyDashboard} />
             <Route exact path="/evaluator" component={EvaluatorDashboard} />
@@ -40,4 +41,4 @@ class App extends React.Component {
   }
 }
 
-export default App;
+export default withRouter(App);
