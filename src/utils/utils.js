@@ -8,6 +8,12 @@ const userIsLoggedIn = expectedType => {
   );
 };
 
+const getUserType = () => sessionStorage.getItem("type");
+
+const getToken = () => sessionStorage.getItem("token");
+
+const getUserId = () => sessionStorage.getItem("userId");
+
 const generateDateString = rawDateString => {
   if (rawDateString === null) {
     return "";
@@ -15,4 +21,4 @@ const generateDateString = rawDateString => {
   return dayjs(rawDateString).format("dddd, MMMM D, YYYY, h:mmA");
 };
 
-export { userIsLoggedIn, generateDateString };
+export { userIsLoggedIn, getUserType, getToken, getUserId, generateDateString };

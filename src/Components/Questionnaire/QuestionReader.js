@@ -6,10 +6,18 @@ const SURVEY = "survey";
 
 function getFromApi(typeOfData, id) {
   var Http = new XMLHttpRequest();
-  const url = "http://localhost:8000/api/" + typeOfData + "/" + id + "/?format=json";
-  Http.open("GET", url, false);
-  Http.send(null);
-  return JSON.parse(Http.responseText);
+  let url = "";
+  if (typeOfData === "question") {
+    url = "http://localhost:8000/api/" + typeOfData + "/" + id + "/?format=json";
+    Http.open("GET", url, false);
+    Http.send(null);
+    return JSON.parse(Http.responseText);
+  } else {
+    url = "http://localhost:8000/api/" + typeOfData + "/?eventId=" + id + "&format=json";
+    Http.open("GET", url, false);
+    Http.send(null);
+    return JSON.parse(Http.responseText)[0];
+  }
 }
 
 function getQuestionnaire(eventID) {
@@ -26,6 +34,7 @@ function getSurveys(eventID) {
 
 function extractQuestions(typeOfData, eventID) {
   var jsonObject = getFromApi(typeOfData, eventID);
+  console.log(jsonObject);
   //jsonObject.questions;
   let questionList = [];
   for (var i = 0; i < jsonObject.questions.length; i++) {
