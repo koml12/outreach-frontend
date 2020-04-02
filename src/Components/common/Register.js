@@ -24,20 +24,9 @@ const Register = props => {
       <Grid item xs={3} />
 
       <Grid item xs={3} />
-      <Grid item xs={3}>
-        <TextField
-          id="standard-basic"
-          type="date"
-          label="Birthdate"
-          name="birthdate"
-          defaultValue={dayjs().format("YYYY-MM-DD")}
-          onChange={props.onInputChange}
-        />
-      </Grid>
-      <Grid item xs={3}>
+      <Grid item xs={9}>
         <TextField id="standard-basic" label="Phone Number" name="Phone Number" onChange={props.onInputChange} />
       </Grid>
-      <Grid item xs={3} />
 
       <Grid item xs={3} />
       <Grid item xs={9}>
@@ -48,12 +37,14 @@ const Register = props => {
       <Grid item xs={9}>
         <TextField
           id="standard-basic"
-          label="Password"
-          type="password"
+          type="date"
+          label="Birthdate"
           name="password"
+          defaultValue={dayjs().format("YYYY-MM-DD")}
           onChange={props.onInputChange}
         />
       </Grid>
+
       <Grid item xs={3} />
       <Grid item xs={9}>
         <Button variant="contained" onClick={props.onRegister}>

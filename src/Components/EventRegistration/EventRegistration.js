@@ -7,6 +7,7 @@ import EventNotFound from "./EventNotFound";
 import axios from "axios";
 import { Redirect } from "react-router-dom";
 import { userIsLoggedIn } from "../../utils/utils";
+import dayjs from "dayjs";
 
 class EventRegistration extends Component {
   constructor(props) {
@@ -18,8 +19,12 @@ class EventRegistration extends Component {
         startDatetime: null,
         endDatetime: null
       },
-      registrationInfo: {},
-      loginInfo: {},
+      registrationInfo: {
+        password: dayjs().format("YYYY-MM-DD")
+      },
+      loginInfo: {
+        password: dayjs().format("YYYY-MM-DD")
+      },
       showRegistration: true,
       showErrorMessage: false,
       isLoggedIn: userIsLoggedIn("Candidate")
@@ -58,7 +63,7 @@ class EventRegistration extends Component {
       method: "post",
       data: this.createRegistrationInfo(this.state.registrationInfo, this.props.match.params.eventId)
     }).then(response => {
-      this.saveAuthToken(response.data.token, response.data.id);
+      this.saveAuthToken(response.data.token, "Candidate", response.data.id);
       this.setState({ isLoggedIn: true });
     });
   }
@@ -135,7 +140,7 @@ class EventRegistration extends Component {
             ) : (
               <Login onInputChange={this.handleLogInInputChange} onLogIn={this.handleLogInClicked} />
             )}
-            {this.state.showErrorMessage ? <ErrorMessage message={this.generateErrorMessage()} /> : null}
+            {this.state.showErrorMessage ? <ErrorMessage offset={3} message={this.generateErrorMessage()} /> : null}
             <RegistrationSwitch
               isRegistering={this.state.showRegistration}
               onRegisterSwitch={this.handleRegistrationSwitch}

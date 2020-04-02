@@ -3,6 +3,7 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
+import dayjs from "dayjs";
 
 const Login = props => (
   <Grid container spacing={2}>
@@ -17,7 +18,14 @@ const Login = props => (
 
     <Grid item xs={3} />
     <Grid item xs={9}>
-      <TextField id="standard-basic" name="password" type="password" label="Password" onChange={props.onInputChange} />
+      <TextField
+        id="standard-basic"
+        type="date"
+        label="Birthdate"
+        name="password"
+        defaultValue={dayjs().format("YYYY-MM-DD")}
+        onChange={props.onInputChange}
+      />
     </Grid>
 
     <Grid item xs={3} />
