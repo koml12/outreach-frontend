@@ -138,7 +138,11 @@ class EventRegistration extends Component {
             {this.state.showRegistration ? (
               <Register onInputChange={this.handleRegisteredInputChange} onRegister={this.handleRegisterClicked} />
             ) : (
-              <Login onInputChange={this.handleLogInInputChange} onLogIn={this.handleLogInClicked} />
+              <Login
+                variant="Candidate"
+                onInputChange={this.handleLogInInputChange}
+                onLogIn={this.handleLogInClicked}
+              />
             )}
             {this.state.showErrorMessage ? <ErrorMessage offset={3} message={this.generateErrorMessage()} /> : null}
             <RegistrationSwitch
