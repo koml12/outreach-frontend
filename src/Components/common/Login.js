@@ -17,16 +17,28 @@ const Login = props => (
     </Grid>
 
     <Grid item xs={3} />
-    <Grid item xs={9}>
-      <TextField
-        id="standard-basic"
-        type="date"
-        label="Birthdate"
-        name="password"
-        defaultValue={dayjs().format("YYYY-MM-DD")}
-        onChange={props.onInputChange}
-      />
-    </Grid>
+    {props.variant === "Candidate" ? (
+      <Grid item xs={9}>
+        <TextField
+          id="standard-basic"
+          type="date"
+          label="Birthdate"
+          name="password"
+          defaultValue={dayjs().format("YYYY-MM-DD")}
+          onChange={props.onInputChange}
+        />
+      </Grid>
+    ) : (
+      <Grid item xs={9}>
+        <TextField
+          id="standard-basic"
+          name="password"
+          type="password"
+          label="Password"
+          onChange={props.onInputChange}
+        />
+      </Grid>
+    )}
 
     <Grid item xs={3} />
     <Grid item xs={9}>
