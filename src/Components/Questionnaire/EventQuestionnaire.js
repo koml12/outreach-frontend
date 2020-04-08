@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Question from "../Questionnaire/Question";
-import {getQuestionnaire} from "../Questionnaire/QuestionReader";
+import {getQuestionnaire, getFromApi} from "../Questionnaire/QuestionReader";
 import "survey-react/survey.css";
 import * as Survey from "survey-react";
 import EventDashboard from "../EventDashboard/EventDashboard";
@@ -10,15 +10,82 @@ class EventQuestionnaire extends Component {
     constructor(props){
         super(props)
         this.state = {
-            eventId: props.match.params.eventId
+            eventId: props.match.params.eventId,
+            userId: sessionStorage.getItem("userId")
         }
     }
 
 
-    onCompleteComponent = () =>{
+    onCompleteComponent = (survey) =>{
         this.setState({
             isCompleted: true
         })
+
+        console.log("Survey results: " + JSON.stringify(survey.data));
+        this.sendToServer(survey.data);
+    }
+
+    sendToServer = (data) => {
+        var keyArray = Object.keys(data);
+        //var questionObj = getFromApi("question", jsonObject.questions[i]);
+        var answerId = this.parseToAnswerId(keyArray, data);
+        debugger;
+        for(var i = 0; i < answerId.length; i++){
+            var json = {
+                candidate : "" + this.state.userId,
+                evaluator : "",
+                question : "" + keyArray[i],
+                answer : "" + answerId[i]
+            }
+            this.postAnswerToDb(json);
+
+        }
+
+        
+    }
+
+    postAnswerToDb = (answerJson) => {
+        var Http = new XMLHttpRequest();
+        const url = 'http://localhost:8000/api/answer/';
+        Http.open("POST", url, false);
+        Http.send(answerJson);
+        console.log("Answer Posted");
+    }
+
+    parseToAnswerId = (keyArray, data) => {
+        var answerId = [];
+        for(var i = 0; i < keyArray.length; i++){
+            var questionObj = getFromApi("question", keyArray[i]);
+            for(var j = 0; j < 5; j++){
+                if(j == 0) {
+                    if(data[keyArray[i]] == questionObj.op1){
+                        answerId.push(j);
+                        break;
+                    }
+                } else if( j == 1) {
+                    if(data[keyArray[i]] == questionObj.op2){
+                        answerId.push(j);
+                        break;
+                    }
+                } else if( j == 2) {
+                    if(data[keyArray[i]] == questionObj.op3){
+                        answerId.push(j);
+                        break;
+                    }
+                } else if( j == 3) {
+                    if(data[keyArray[i]] == questionObj.op4){
+                        answerId.push(j);
+                        break;
+                    }
+                } else if( j == 4) {
+                    if(data[keyArray[i]] == questionObj.op5){
+                        answerId.push(j);
+                        break;
+                    }
+                }
+            }
+        }
+        return answerId;
     }
 
     render(){
