@@ -1,15 +1,10 @@
 import React, { Component } from "react";
 import axios from "axios";
 import IconButton from "@material-ui/core/IconButton";
-import Grid from "@material-ui/core/Grid";
-import ExpansionPanel from "@material-ui/core/ExpansionPanel";
-import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
-import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
-import Typography from "@material-ui/core/Typography";
 import ArrowBackTwoToneIcon from "@material-ui/icons/ArrowBackTwoTone";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 import { EventInfo } from "../../../../common/";
+import RegisteredCandidateList from "./RegisteredCandidateList";
 
 export default class EventDetail extends Component {
   constructor(props) {
@@ -48,6 +43,8 @@ export default class EventDetail extends Component {
     this.setState({ expandedRegistration });
   }
 
+  handleRegistrationChange(registration) {}
+
   render() {
     return (
       <div>
@@ -55,32 +52,10 @@ export default class EventDetail extends Component {
           <ArrowBackTwoToneIcon fontSize="large" />
         </IconButton>
         <EventInfo event={this.state.event} />
-        {this.state.registrations.map((registration) => {
-          const { candidate } = registration;
-          return (
-            <ExpansionPanel
-              expanded={this.state.expandedRegistration === registration}
-              onChange={() => this.handleExpansionChange(registration)}
-            >
-              <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                <Grid container spacing={2}>
-                  <Grid item xs={4}>
-                    <Typography variant="h5">
-                      {candidate["first_name"]} {candidate["last_name"]}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={2} />
-                  <Grid item xs={6}>
-                    <Typography variant="h6" color="textSecondary">
-                      {candidate["email"]}
-                    </Typography>
-                  </Grid>
-                </Grid>
-              </ExpansionPanelSummary>
-              <ExpansionPanelDetails></ExpansionPanelDetails>
-            </ExpansionPanel>
-          );
-        })}
+        <RegisteredCandidateList
+          registrations={this.state.registrations}
+          onRegistrationChange={this.handleRegistrationChange}
+        />
       </div>
     );
   }

@@ -25,13 +25,26 @@ const useStyles = makeStyles({
 const AddEventModal = (props) => {
   const classes = useStyles();
 
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [startDatetime, setStartDatetime] = useState(new Date());
-  const [endDatetime, setEndDatetime] = useState(new Date());
+  console.log(props.event);
+
+  let initialName = "",
+    initialDescription = "",
+    initialStartDatetime = new Date(),
+    initialEndDatetime = new Date();
+  if (props.event) {
+    initialName = props.event["Event Name"];
+    initialDescription = props.event["Description"];
+    initialStartDatetime = new Date(props.event["Start Time"]);
+    initialEndDatetime = new Date(props.event["End Time"]);
+  }
+  const [name, setName] = useState(initialName);
+  const [description, setDescription] = useState(initialDescription);
+  const [startDatetime, setStartDatetime] = useState(initialStartDatetime);
+  const [endDatetime, setEndDatetime] = useState(initialEndDatetime);
 
   const onSubmit = () => {
     const event = {
+      id: props.event ? props.event.id : null,
       "Event Name": name,
       Description: description,
       "Start Time": startDatetime,
@@ -43,7 +56,7 @@ const AddEventModal = (props) => {
   return (
     <Dialog open={props.open} onClose={props.onClose}>
       <DialogTitle>
-        Create A New Event
+        {props.event ? "Edit Event" : "Create A New Event"}
         <IconButton className={classes.closeButton} onClick={props.onClose}>
           <CloseIcon />
         </IconButton>
@@ -61,6 +74,7 @@ const AddEventModal = (props) => {
               label="Event Name"
               fullWidth
               margin="dense"
+              defaultValue={name}
               onChange={(e) => setName(e.target.value)}
             />
           </Grid>
@@ -72,6 +86,7 @@ const AddEventModal = (props) => {
               fullWidth
               multiline
               margin="dense"
+              defaultValue={description}
               onChange={(e) => setDescription(e.target.value)}
             />
           </Grid>
@@ -110,7 +125,7 @@ const AddEventModal = (props) => {
       </DialogContent>
       <DialogActions>
         <Button color="primary" onClick={onSubmit}>
-          Create Event
+          {`${props.event ? "Update" : "Create"} Event`}
         </Button>
       </DialogActions>
     </Dialog>
