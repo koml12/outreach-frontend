@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import SignUpStepper from "./SignUpStepper";
 import StepNavigation from "./StepNavigation";
 import ResumeUpload from "../ResumeUpload";
+import { EventQuestionnaire } from "../Questionnaire";
+import SignUpFinished from "./SignUpFinished";
 
 class EventSignUp extends Component {
   constructor(props) {
@@ -16,6 +18,7 @@ class EventSignUp extends Component {
     this.setStepComplete = this.setStepComplete.bind(this);
     this.onStepIncrement = this.onStepIncrement.bind(this);
     this.onStepDecrement = this.onStepDecrement.bind(this);
+    this.handleFinishClicked = this.handleFinishClicked.bind(this);
     this.renderSignUpStep = this.renderSignUpStep.bind(this);
   }
 
@@ -26,7 +29,14 @@ class EventSignUp extends Component {
   setStepComplete(step) {
     if (!this.state.completedSteps.includes(step)) {
       const completedSteps = [...this.state.completedSteps, step];
-      this.setState({ completedSteps });
+      this.setState({ completedSteps }, () => {
+        if (completedSteps.length === this.state.steps.length) {
+          this.setState({ activeStep: this.state.steps.length });
+        }
+      });
+    }
+    if (this.state.completedSteps.length === this.state.steps.length) {
+      this.setState({ activeStep: this.state.steps.length });
     }
   }
 
@@ -40,11 +50,17 @@ class EventSignUp extends Component {
     this.setState({ activeStep });
   }
 
+  handleFinishClicked() {
+    this.setState({ activeStep: this.state.steps.length });
+  }
+
   renderSignUpStep() {
     if (this.state.activeStep === 0) {
-      return <ResumeUpload />;
+      return <ResumeUpload eventId={this.props.eventId} onComplete={() => this.setStepComplete(0)} />;
+    } else if (this.state.activeStep === 1) {
+      return <EventQuestionnaire eventId={this.props.eventId} onComplete={() => this.setStepComplete(1)} />;
     } else {
-      return null;
+      return <SignUpFinished />;
     }
   }
 
@@ -66,6 +82,7 @@ class EventSignUp extends Component {
           numberCompleted={this.state.completedSteps.length}
           onNextClicked={this.onStepIncrement}
           onPreviousClicked={this.onStepDecrement}
+          onFinishClicked={this.handleFinishClicked}
         />
       </div>
     );

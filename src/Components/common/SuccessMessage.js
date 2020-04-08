@@ -1,10 +1,10 @@
 import React from "react";
 import Typography from "@material-ui/core/Typography";
 
-const ErrorMessage = props => (
-  <Typography variant="body2" color="error">
+const SuccessMessage = props => (
+  <Typography variant="body2" color="primary">
     {props.message}
   </Typography>
 );
 
-export default ErrorMessage;
+export default SuccessMessage;

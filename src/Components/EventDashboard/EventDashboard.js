@@ -12,12 +12,12 @@ export default class EventDashboard extends Component {
   }
 
   render() {
-    if (!userIsLoggedIn()) {
+    if (!userIsLoggedIn("Candidate")) {
       return <Redirect to={`/events/${this.state.eventId}/login`} />;
     } else {
       return (
         <div>
-          <EventSignUp />
+          <EventSignUp eventId={this.state.eventId} />
         </div>
       );
     }
