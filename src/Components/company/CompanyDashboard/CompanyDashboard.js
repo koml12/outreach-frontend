@@ -1,7 +1,6 @@
 import React from "react";
 import { Redirect } from "react-router-dom";
 import { userIsLoggedIn, getUserType } from "../../../utils/utils";
-import EvaluatorDashboard from "../EvaluatorDashboard";
 import HRDashboard from "../HRDashboard";
 
 const CompanyDashboard = () => {

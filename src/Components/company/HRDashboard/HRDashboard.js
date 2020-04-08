@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
+import Box from "@material-ui/core/Box";
 
 import TabPanel from "./TabPanel";
 import {
@@ -10,7 +11,7 @@ import {
   GroupsPanel,
   QuestionnairesPanel,
   RankingsPanel,
-  AnalyticsPanel
+  AnalyticsPanel,
 } from "./panels";
 
 const TabNames = {
@@ -19,7 +20,7 @@ const TabNames = {
   GROUPS: 2,
   QUESTIONNAIRES: 3,
   RANKINGS: 4,
-  ANALYTICS: 5
+  ANALYTICS: 5,
 };
 
 const HRDashboard = () => {
@@ -39,6 +40,8 @@ const HRDashboard = () => {
         <Tab label="Rankings" />
         <Tab label="Analytics" />
       </Tabs>
+
+      <Box marginBottom="24px" />
 
       <TabPanel value={value} index={TabNames.CANDIDATES}>
         <CandidatesPanel />
