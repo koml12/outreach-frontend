@@ -13,6 +13,7 @@ import { getToken } from "../../../../../utils/utils";
 
 import CandidateQuestionResponses from "./CandidateQuestionResponses";
 import EvaluatorQuestionResponses from "./EvaluatorQuestionResponses";
+import ResumeInfo from "../ResumeInfo";
 
 class RegisteredCandidateDetail extends Component {
   constructor(props) {
@@ -26,13 +27,16 @@ class RegisteredCandidateDetail extends Component {
         event: props.event,
         candidate: props.candidate,
       },
+      resume: null,
     };
     this.getAvailableGroups = this.getAvailableGroups.bind(this);
+    this.getResume = this.getResume.bind(this);
     this.onGroupSelect = this.onGroupSelect.bind(this);
   }
 
   componentDidMount() {
     this.getAvailableGroups();
+    this.getResume(this.props.resume);
   }
 
   getAvailableGroups() {
@@ -42,6 +46,19 @@ class RegisteredCandidateDetail extends Component {
     }).then((response) => {
       const groups = response.data;
       this.setState({ groups });
+    });
+  }
+
+  getResume(resumeId) {
+    if (!resumeId) {
+      return;
+    }
+    axios({
+      method: "get",
+      url: `http://localhost:8000/api/resume/${resumeId}/`,
+    }).then((response) => {
+      const resume = response.data;
+      this.setState({ resume });
     });
   }
 
@@ -77,11 +94,13 @@ class RegisteredCandidateDetail extends Component {
         </Grid>
 
         <Grid item xs={6}>
-          <Typography variant="body1" color={this.state.registration.resume !== null ? "textPrimary" : "error"}>
-            {this.state.registration.resume !== null
-              ? "Candidate uploaded resume"
-              : "Candidate did not upload resume yet"}
-          </Typography>
+          {this.state.resume === null ? (
+            <Typography variant="body1" color="error">
+              No resume uploaded yet
+            </Typography>
+          ) : (
+            <ResumeInfo url={this.state.resume.file} />
+          )}
         </Grid>
 
         <Grid item xs={2}>
