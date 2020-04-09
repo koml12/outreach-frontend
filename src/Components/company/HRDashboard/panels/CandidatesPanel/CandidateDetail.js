@@ -6,7 +6,7 @@ import Typography from "@material-ui/core/Typography";
 import RegisteredEvents from "./RegisteredEvents";
 
 const CandidateDetail = (props) => {
-  const { candidate, registrations } = props;
+  const { registrations } = props;
 
   const resumeId = registrations && registrations.length > 0 ? registrations[0].resume : null;
 
