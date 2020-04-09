@@ -32,57 +32,55 @@ function getSurveys(eventID) {
   return jsonifyQuestions();
 }
 
-function extractQuestions(typeOfData, eventID){
-    var jsonObject = getFromApi(typeOfData, eventID);
-    //jsonObject.questions;
-    
-    for(var i = 0; i < jsonObject.questions.length; i++){
+function extractQuestions(typeOfData, eventID) {
+  var jsonObject = getFromApi(typeOfData, eventID);
+  //jsonObject.questions;
 
-        var questionObj = getFromApi("question", jsonObject.questions[i]);
-        var questionId = questionObj.id;
-        var answers = [questionObj.op1, questionObj.op2, questionObj.op3, 
-            questionObj.op4, questionObj.op5];
+  for (var i = 0; i < jsonObject.questions.length; i++) {
+    var questionObj = getFromApi("question", jsonObject.questions[i]);
+    var questionId = questionObj.id;
+    var answers = [questionObj.op1, questionObj.op2, questionObj.op3, questionObj.op4, questionObj.op5];
 
-        let q = new Question(questionObj.text, answers, questionId);
-        questionPush(q)
-    }
-}
-
-function jsonifyQuestions(){
-    var jsonArray=[];
-    
-    for(var i = 0; i < questionCollection.length; i++){
-        var temp = {
-            type: "radiogroup",
-            name: ""+questionCollection[i].questionId,
-            title: questionCollection[i].questionText,
-            isRequired: true,
-            colCount: 5,
-            choices: questionCollection[i].answerArray
-        }
-            jsonArray = jsonArray.concat(temp);
-    }
-    return jsonArray;
+    let q = new Question(questionObj.text, answers, questionId);
+    questionCollection.push(q);
+  }
 }
 
 function jsonifyQuestions() {
   var jsonArray = [];
+
   for (var i = 0; i < questionCollection.length; i++) {
     var temp = {
       type: "radiogroup",
-      name: "q" + (i + 1),
+      name: "" + questionCollection[i].questionId,
       title: questionCollection[i].questionText,
       isRequired: true,
       colCount: 5,
-      choices: questionCollection[i].answerArray
+      choices: questionCollection[i].answerArray,
     };
     jsonArray = jsonArray.concat(temp);
   }
   return jsonArray;
 }
 
+// function jsonifyQuestions() {
+//   var jsonArray = [];
+//   for (var i = 0; i < questionCollection.length; i++) {
+//     var temp = {
+//       type: "radiogroup",
+//       name: "q" + (i + 1),
+//       title: questionCollection[i].questionText,
+//       isRequired: true,
+//       colCount: 5,
+//       choices: questionCollection[i].answerArray
+//     };
+//     jsonArray = jsonArray.concat(temp);
+//   }
+//   return jsonArray;
+// }
+
 function getQuestions() {
   return questionCollection;
 }
 
-export {getQuestionnaire, getSurveys, getQuestions, getFromApi};
+export { getQuestionnaire, getSurveys, getQuestions, getFromApi };
