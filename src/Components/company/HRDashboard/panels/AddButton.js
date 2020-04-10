@@ -12,7 +12,7 @@ const useStyles = makeStyles({
   },
 });
 
-const AddEventButton = (props) => {
+const AddButton = (props) => {
   const classes = useStyles();
 
   return (
@@ -22,4 +22,4 @@ const AddEventButton = (props) => {
   );
 };
 
-export default AddEventButton;
+export default AddButton;

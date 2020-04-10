@@ -3,10 +3,10 @@ import axios from "axios";
 import Grid from "@material-ui/core/Grid";
 
 import { generateDateString, getToken } from "../../../../../utils/utils";
-import EventCard from "./EventCard";
+import EventCard from "../EventCard";
 import EventDetail from "./EventDetail";
 import AddEventModal from "./AddEventModal";
-import AddEventButton from "./AddEventButton";
+import AddButton from "../AddButton";
 import DeleteEventModal from "./DeleteEventModal";
 
 class EventsPanel extends Component {
@@ -155,7 +155,7 @@ class EventsPanel extends Component {
                 </Grid>
               ))}
             </Grid>
-            <AddEventButton onClick={this.handleAddEventClicked} />
+            <AddButton onClick={this.handleAddEventClicked} />
           </div>
         )}
       </div>
