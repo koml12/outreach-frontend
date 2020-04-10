@@ -28,9 +28,7 @@ const useStyles = makeStyles({
 
 const AddGroupModal = (props) => {
   const classes = useStyles();
-  const { open, onClose, onSubmit, registrations } = props;
-
-  const evaluators = [{ id: null, first_name: "None", last_name: "" }, ...props.evaluators];
+  const { open, onClose, onSubmit, registrations, evaluators } = props;
 
   const [name, setName] = useState("");
   const [selectedEvaluator, setSelectedEvaluator] = useState(null);

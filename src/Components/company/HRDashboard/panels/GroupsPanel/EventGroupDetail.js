@@ -7,6 +7,7 @@ import { EventInfo } from "../../../../common";
 import GroupList from "./GroupList";
 import AddButton from "../AddButton";
 import AddGroupModal from "./AddGroupModal";
+import DeleteGroupModal from "./DeleteGroupModal";
 
 import { getToken } from "../../../../../utils/utils";
 
@@ -34,11 +35,13 @@ class EventGroupDetail extends Component {
     this.getAllEvaluators = this.getAllEvaluators.bind(this);
     this.getRegisteredCandidates = this.getRegisteredCandidates.bind(this);
     this.handleAddButtonClick = this.handleAddButtonClick.bind(this);
-    this.handleEditButtonClick = this.handleEditButtonClick.bind(this);
-    this.handleDeleteButtonClick = this.handleDeleteButtonClick.bind(this);
     this.handleModalClose = this.handleModalClose.bind(this);
     this.createGroup = this.createGroup.bind(this);
     this.registerCandidatesToGroup = this.registerCandidatesToGroup.bind(this);
+    this.handleDeleteGroup = this.handleDeleteGroup.bind(this);
+    this.handleEditGroup = this.handleEditGroup.bind(this);
+    this.handleRemoveRegistration = this.handleRemoveRegistration.bind(this);
+    this.deleteGroup = this.deleteGroup.bind(this);
   }
 
   componentDidMount() {
@@ -81,14 +84,6 @@ class EventGroupDetail extends Component {
     this.setState({ showAddModal: true });
   }
 
-  handleEditButtonClick(group) {
-    this.setState({ showEditModal: true, modifyingGroup: group });
-  }
-
-  handleDeleteButtonClick(group) {
-    this.setState({ showDeleteModal: true, modifyingGroup: group });
-  }
-
   handleModalClose() {
     this.setState({ showAddModal: false, showEditModal: false, showDeleteModal: false, modifyingGroup: null });
   }
@@ -109,7 +104,7 @@ class EventGroupDetail extends Component {
       this.registerCandidatesToGroup(id, registrations);
       const groups = [
         ...this.state.groups,
-        { ...group, candidates: registrations.map((registration) => registration.candidate.id) },
+        { ...group, candidates: registrations.map((registration) => registration.id) },
       ];
       console.log(groups);
       this.setState({ groups });
@@ -140,9 +135,28 @@ class EventGroupDetail extends Component {
   getAvailableRegistrations(registrations, groups) {
     const claimedCandidates = groups.map((group) => group.candidates).reduce((prev, curr) => prev.concat(curr), []);
     console.log(claimedCandidates);
-    return registrations.filter(
-      (registration) => !claimedCandidates.includes(registration.candidate.id) && registration.group === null
-    );
+    return registrations.filter((registration) => !claimedCandidates.includes(registration.candidate.id));
+  }
+
+  handleEditGroup(group, evaluator, registrations) {
+    this.setState({ showEditModal: true, modifyingGroup: group });
+  }
+
+  handleDeleteGroup(group) {
+    this.setState({ showDeleteModal: true, modifyingGroup: group });
+  }
+
+  handleRemoveRegistration(group, registration) {}
+
+  deleteGroup(groupId) {
+    axios({
+      method: "delete",
+      url: `http://localhost:8000/api/group/${groupId}/`,
+    }).then(() => {
+      const foundIndex = this.state.groups.findIndex((g) => g.id === groupId);
+      const groups = [...this.state.groups.slice(0, foundIndex), ...this.state.groups.slice(foundIndex + 1)];
+      this.setState({ groups, showDeleteModal: false, modifyingGroup: null });
+    });
   }
 
   render() {
@@ -161,8 +175,24 @@ class EventGroupDetail extends Component {
           />
         )}
 
+        {this.state.showDeleteModal && this.state.modifyingGroup !== null && (
+          <DeleteGroupModal
+            open={this.state.showDeleteModal}
+            name={this.state.modifyingGroup.name}
+            onDelete={() => this.deleteGroup(this.state.modifyingGroup.id)}
+            onClose={this.handleModalClose}
+          />
+        )}
+
         <EventInfo event={this.state.event} />
-        <GroupList groups={this.state.groups} />
+        <GroupList
+          groups={this.state.groups}
+          registrations={this.state.registrations}
+          evaluators={this.state.evaluators}
+          onEditGroup={this.handleEditGroup}
+          onDeleteGroup={this.handleDeleteGroup}
+          onRemoveRegistration={this.handleRemoveRegistration}
+        />
         <AddButton onClick={this.handleAddButtonClick} />
       </div>
     );
