@@ -9,6 +9,7 @@ import {
   CandidatesPanel,
   EventsPanel,
   GroupsPanel,
+  JobsPanel,
   QuestionnairesPanel,
   RankingsPanel,
   AnalyticsPanel,
@@ -18,9 +19,10 @@ const TabNames = {
   CANDIDATES: 0,
   EVENTS: 1,
   GROUPS: 2,
-  QUESTIONNAIRES: 3,
-  RANKINGS: 4,
-  ANALYTICS: 5,
+  JOBS: 3,
+  QUESTIONNAIRES: 4,
+  RANKINGS: 5,
+  ANALYTICS: 6,
 };
 
 const HRDashboard = () => {
@@ -36,6 +38,7 @@ const HRDashboard = () => {
         <Tab label="Candidates" />
         <Tab label="Events" />
         <Tab label="Groups" />
+        <Tab label="Jobs" />
         <Tab label="Questionnaires" />
         <Tab label="Rankings" />
         <Tab label="Analytics" />
@@ -53,6 +56,10 @@ const HRDashboard = () => {
 
       <TabPanel value={value} index={TabNames.GROUPS}>
         <GroupsPanel />
+      </TabPanel>
+
+      <TabPanel value={value} index={TabNames.JOBS}>
+        <JobsPanel />
       </TabPanel>
 
       <TabPanel value={value} index={TabNames.QUESTIONNAIRES}>
