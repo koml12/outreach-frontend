@@ -18,6 +18,7 @@ const useStyles = makeStyles({
 });
 
 const EventCard = (props) => {
+  const { constant } = props;
   const classes = useStyles();
 
   return (
@@ -31,9 +32,11 @@ const EventCard = (props) => {
           </Grid>
 
           <Grid item xs={1}>
-            <IconButton onClick={props.onEditClicked}>
-              <EditIcon fontSize="small" color="primary" />
-            </IconButton>
+            {!constant && (
+              <IconButton onClick={props.onEditClicked}>
+                <EditIcon fontSize="small" color="primary" />
+              </IconButton>
+            )}
           </Grid>
           <Grid item xs={12}>
             <Typography variant="h5" color="textSecondary">
@@ -62,13 +65,15 @@ const EventCard = (props) => {
         <Grid container spacing={0} justify="space-around">
           <Grid item xs={11}>
             <Button color="primary" onClick={props.onButtonClicked}>
-              View Candidates
+              View Details
             </Button>
           </Grid>
           <Grid item xs={1}>
-            <IconButton className={classes.deleteButton} onClick={props.onDeleteClicked}>
-              <DeleteIcon fontSize="small" color="error" />
-            </IconButton>
+            {!constant && (
+              <IconButton className={classes.deleteButton} onClick={props.onDeleteClicked}>
+                <DeleteIcon fontSize="small" color="error" />
+              </IconButton>
+            )}
           </Grid>
         </Grid>
       </CardActions>
