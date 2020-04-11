@@ -169,7 +169,31 @@ class EventGroupDetail extends Component {
     this.setState({ showDeleteModal: true, modifyingGroup: group });
   }
 
-  handleRemoveRegistration(group, registration) {}
+  handleRemoveRegistration(group, registration) {
+    axios({
+      method: "patch",
+      url: `http://localhost:8000/api/registration/${registration.id}/`,
+      data: {
+        group: null,
+      },
+      headers: {
+        Authorization: `Token ${getToken()}`,
+      },
+    }).then(() => {
+      const foundIndex = this.state.groups.findIndex((g) => g.id === group.id);
+      const candidates = group.candidates.filter((registrationId) => registrationId !== registration.id);
+      const newGroup = {
+        id: group.id,
+        name: group.name,
+        evaluator: group.evaluator.id,
+        event: group.event,
+        candidates,
+      };
+      console.log(newGroup);
+      const groups = [...this.state.groups.slice(0, foundIndex), newGroup, ...this.state.groups.slice(foundIndex + 1)];
+      this.setState({ groups });
+    });
+  }
 
   deleteGroup(groupId) {
     axios({

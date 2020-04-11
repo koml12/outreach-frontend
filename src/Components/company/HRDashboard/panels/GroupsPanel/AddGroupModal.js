@@ -43,7 +43,7 @@ const AddGroupModal = (props) => {
   const [selectedEvaluator, setSelectedEvaluator] = useState(initialEvaluator);
   const [selectedRegistrations, setSelectedRegistrations] = useState(initialSelectedRegistrations);
 
-  const registrations = [...props.registrations, ...selectedRegistrations];
+  const registrations = [...new Set([...props.registrations, ...initialSelectedRegistrations])];
 
   const onRegistrationSelected = (registration) => {
     let newRegistrations;

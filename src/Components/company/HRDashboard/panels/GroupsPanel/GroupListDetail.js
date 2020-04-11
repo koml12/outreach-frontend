@@ -38,6 +38,16 @@ const GroupListDetail = (props) => {
     onEdit(group);
   };
 
+  const removeRegistration = (registration) => {
+    const group = {
+      id,
+      name,
+      evaluator,
+      candidates: registrations.map((registration) => registration.id),
+    };
+    onRemoveRegistration(group, registration);
+  };
+
   return (
     <Grid container spacing={0}>
       <Grid item xs={10}>
@@ -78,7 +88,7 @@ const GroupListDetail = (props) => {
                   </Grid>
                 </ListItemText>
                 <ListItemSecondaryAction>
-                  <IconButton edge="end">
+                  <IconButton edge="end" onClick={() => removeRegistration(registration)}>
                     <RemoveCircleOutlineIcon color="secondary" />
                   </IconButton>
                 </ListItemSecondaryAction>
