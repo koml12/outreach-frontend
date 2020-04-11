@@ -11,6 +11,8 @@ import Box from "@material-ui/core/Box";
 const CandidateCheckList = (props) => {
   const { registrations, selectedRegistrations, onRegistrationSelected } = props;
 
+  console.log(registrations);
+
   return (
     <div>
       <Typography variant="subtitle1">

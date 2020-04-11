@@ -42,6 +42,7 @@ class EventGroupDetail extends Component {
     this.handleEditGroup = this.handleEditGroup.bind(this);
     this.handleRemoveRegistration = this.handleRemoveRegistration.bind(this);
     this.deleteGroup = this.deleteGroup.bind(this);
+    this.getEditData = this.getEditData.bind(this);
   }
 
   componentDidMount() {
@@ -91,27 +92,32 @@ class EventGroupDetail extends Component {
   createGroup(group, registrations) {
     //this.handleModalClose();
     let groupWithEvent = { ...group, event: this.props.event.id };
+    let groupId = group.id;
+    console.log(groupWithEvent);
     axios({
-      method: "post",
-      url: "http://localhost:8000/api/group/",
+      method: group.id ? "patch" : "post",
+      url: `http://localhost:8000/api/group/${group.id ? group.id + "/" : ""}`,
       data: groupWithEvent,
       headers: {
         Authorization: `Token ${getToken()}`,
       },
     }).then((response) => {
-      const group = response.data;
-      const { id } = group;
-      this.registerCandidatesToGroup(id, registrations);
-      const groups = [
-        ...this.state.groups,
-        { ...group, candidates: registrations.map((registration) => registration.id) },
-      ];
+      this.registerCandidatesToGroup(response.data.id, registrations, groupId === true);
+      let createdGroup = { ...response.data, candidates: registrations.map((registration) => registration.id) };
+      let groups;
+      if (groupId) {
+        const foundIndex = this.state.groups.findIndex((g) => g.id === groupId);
+        groups = [...this.state.groups.slice(0, foundIndex), createdGroup, ...this.state.groups.slice(foundIndex + 1)];
+      } else {
+        groups = [...this.state.groups, createdGroup];
+      }
+
       console.log(groups);
       this.setState({ groups });
     });
   }
 
-  registerCandidatesToGroup(groupId, registrations) {
+  registerCandidatesToGroup(groupId, registrations, groupExists) {
     const promises = registrations.map((registration) => {
       return axios({
         method: "patch",
@@ -124,22 +130,39 @@ class EventGroupDetail extends Component {
         },
       });
     });
-    axios.all(promises).then(() => this.handleModalClose());
+    const uncheckedRegistrations = this.state.registrations
+      .filter((registration) => registration.group === groupId && !registrations.includes(registration))
+      .map((registration) => {
+        return axios({
+          method: "patch",
+          url: `http://localhost:8000/api/registration/${registration.id}/`,
+          data: {
+            group: null,
+          },
+          headers: {
+            Authorization: `Token ${getToken()}`,
+          },
+        });
+      });
+    axios.all([...promises, ...uncheckedRegistrations]).then(() => this.handleModalClose());
   }
 
-  getAvailableEvaluators(evaluators, groups) {
+  getAvailableEvaluators(evaluators, groups, modifyingGroup) {
+    const modifyingEvaluator = modifyingGroup ? modifyingGroup.evaluator.id : null;
     const claimedEvaluators = groups.map((group) => group.evaluator);
-    return evaluators.filter((evaluator) => !claimedEvaluators.includes(evaluator.id));
+    return evaluators.filter(
+      (evaluator) => !claimedEvaluators.includes(evaluator.id) || evaluator.id === modifyingEvaluator
+    );
   }
 
   getAvailableRegistrations(registrations, groups) {
     const claimedCandidates = groups.map((group) => group.candidates).reduce((prev, curr) => prev.concat(curr), []);
     console.log(claimedCandidates);
-    return registrations.filter((registration) => !claimedCandidates.includes(registration.candidate.id));
+    return registrations.filter((registration) => !claimedCandidates.includes(registration.id));
   }
 
-  handleEditGroup(group, evaluator, registrations) {
-    this.setState({ showEditModal: true, modifyingGroup: group });
+  handleEditGroup(group) {
+    this.setState({ showAddModal: true, modifyingGroup: group });
   }
 
   handleDeleteGroup(group) {
@@ -159,6 +182,19 @@ class EventGroupDetail extends Component {
     });
   }
 
+  getEditData() {
+    if (!this.state.modifyingGroup) {
+      return null;
+    }
+    const { modifyingGroup } = this.state;
+    return {
+      id: modifyingGroup.id,
+      name: modifyingGroup.name,
+      evaluator: modifyingGroup.evaluator.id,
+      registrations: this.state.registrations.filter((r) => modifyingGroup.candidates.includes(r.id)),
+    };
+  }
+
   render() {
     return (
       <div>
@@ -170,8 +206,13 @@ class EventGroupDetail extends Component {
             open={this.state.showAddModal}
             onClose={this.handleModalClose}
             onSubmit={this.createGroup}
-            evaluators={this.getAvailableEvaluators(this.state.evaluators, this.state.groups)}
+            evaluators={this.getAvailableEvaluators(
+              this.state.evaluators,
+              this.state.groups,
+              this.state.modifyingGroup
+            )}
             registrations={this.getAvailableRegistrations(this.state.registrations, this.state.groups)}
+            initialData={this.getEditData()}
           />
         )}
 

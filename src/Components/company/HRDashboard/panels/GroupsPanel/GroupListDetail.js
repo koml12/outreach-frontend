@@ -28,6 +28,16 @@ const GroupListDetail = (props) => {
     onDelete(group);
   };
 
+  const editGroup = () => {
+    const group = {
+      id,
+      name,
+      evaluator,
+      candidates: registrations.map((registration) => registration.id),
+    };
+    onEdit(group);
+  };
+
   return (
     <Grid container spacing={0}>
       <Grid item xs={10}>
@@ -41,7 +51,7 @@ const GroupListDetail = (props) => {
       </Grid>
       <Grid item xs={2}>
         <ButtonGroup fullWidth>
-          <Button color="primary" startIcon={<EditIcon />}>
+          <Button color="primary" startIcon={<EditIcon />} onClick={editGroup}>
             Edit
           </Button>
           <Button color="secondary" startIcon={<DeleteIcon />} onClick={deleteGroup}>

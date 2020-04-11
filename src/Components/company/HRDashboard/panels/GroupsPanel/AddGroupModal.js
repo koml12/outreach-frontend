@@ -28,11 +28,22 @@ const useStyles = makeStyles({
 
 const AddGroupModal = (props) => {
   const classes = useStyles();
-  const { open, onClose, onSubmit, registrations, evaluators } = props;
+  const { open, onClose, onSubmit, evaluators, initialData } = props;
 
-  const [name, setName] = useState("");
-  const [selectedEvaluator, setSelectedEvaluator] = useState(null);
-  const [selectedRegistrations, setSelectedRegistrations] = useState([]);
+  let initialName = "";
+  let initialEvaluator = null;
+  let initialSelectedRegistrations = [];
+  if (initialData) {
+    initialName = initialData.name;
+    initialEvaluator = initialData.evaluator;
+    initialSelectedRegistrations = initialData.registrations;
+  }
+
+  const [name, setName] = useState(initialName);
+  const [selectedEvaluator, setSelectedEvaluator] = useState(initialEvaluator);
+  const [selectedRegistrations, setSelectedRegistrations] = useState(initialSelectedRegistrations);
+
+  const registrations = [...props.registrations, ...selectedRegistrations];
 
   const onRegistrationSelected = (registration) => {
     let newRegistrations;
@@ -50,6 +61,7 @@ const AddGroupModal = (props) => {
 
   const onGroupCreated = () => {
     const group = {
+      id: initialData ? initialData.id : null,
       evaluator: selectedEvaluator,
       name: name,
     };
@@ -72,7 +84,10 @@ const AddGroupModal = (props) => {
           <Grid item xs={6}>
             <FormControl style={{ minWidth: "240px" }}>
               <InputLabel>Evaluator</InputLabel>
-              <Select defaultValue="" onChange={(e) => setSelectedEvaluator(e.target.value)}>
+              <Select
+                defaultValue={selectedEvaluator ? selectedEvaluator : ""}
+                onChange={(e) => setSelectedEvaluator(e.target.value)}
+              >
                 {evaluators.map((evaluator) => (
                   <MenuItem value={evaluator.id}>
                     {evaluator["first_name"]} {evaluator["last_name"]}
@@ -92,7 +107,7 @@ const AddGroupModal = (props) => {
       </DialogContent>
       <DialogActions>
         <Button color="primary" onClick={onGroupCreated}>
-          Create Group
+          {initialData ? "Update" : "Create"} Group
         </Button>
       </DialogActions>
     </Dialog>
