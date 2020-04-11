@@ -12,15 +12,16 @@ import CompanyDashboard from "./components/company/CompanyDashboard";
 import EvaluatorDashboard from "./components/company/EvaluatorDashboard";
 import EvaluatorSurvey from "./components/company/EvaluatorSurvey";
 
+import theme from "./theme";
+
 import Toolbar from "@material-ui/core/Toolbar";
 import Container from "@material-ui/core/Container";
-import * as Survey from "survey-react";
-import "survey-react/survey.css";
+import { ThemeProvider } from "@material-ui/core/styles";
 
 class App extends React.Component {
   render() {
     return (
-      <div>
+      <ThemeProvider theme={theme}>
         <Container>
           <Header company="Company Name" loggedIn={!this.props.location.pathname.endsWith("login")} />
           <Toolbar />
@@ -36,7 +37,7 @@ class App extends React.Component {
           </Switch>
         </Container>
         <Footer />
-      </div>
+      </ThemeProvider>
     );
   }
 }
