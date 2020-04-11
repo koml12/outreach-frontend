@@ -8,6 +8,7 @@ import GroupList from "./GroupList";
 import AddButton from "../AddButton";
 import AddGroupModal from "./AddGroupModal";
 import DeleteGroupModal from "./DeleteGroupModal";
+import AutoDivideGroupsButton from "./AutoDivideGroupsButton";
 
 import { getToken } from "../../../../../utils/utils";
 
@@ -43,6 +44,7 @@ class EventGroupDetail extends Component {
     this.handleRemoveRegistration = this.handleRemoveRegistration.bind(this);
     this.deleteGroup = this.deleteGroup.bind(this);
     this.getEditData = this.getEditData.bind(this);
+    this.handleAutoDivideGroups = this.handleAutoDivideGroups.bind(this);
   }
 
   componentDidMount() {
@@ -206,6 +208,19 @@ class EventGroupDetail extends Component {
     });
   }
 
+  handleAutoDivideGroups() {
+    axios({
+      method: "get",
+      url: `http://localhost:8000/api/divideGroups/${this.props.event.id}`,
+      headers: {
+        Authorization: `Token ${getToken()}`,
+      },
+    }).then(() => {
+      this.getGroupsForEvent(this.props.event.id);
+      this.getRegisteredCandidates(this.props.event.id);
+    });
+  }
+
   getEditData() {
     if (!this.state.modifyingGroup) {
       return null;
@@ -250,6 +265,8 @@ class EventGroupDetail extends Component {
         )}
 
         <EventInfo event={this.state.event} />
+        {this.state.groups.length > 0 && <AutoDivideGroupsButton onClick={this.handleAutoDivideGroups} />}
+
         <GroupList
           groups={this.state.groups}
           registrations={this.state.registrations}
