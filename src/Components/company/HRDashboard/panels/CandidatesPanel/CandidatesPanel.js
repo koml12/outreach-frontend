@@ -44,6 +44,7 @@ class CandidatesPanel extends Component {
           registrations: registrations
             .filter((registration) => registration.candidate.id === candidate.id)
             .sort((r1, r2) => r2.id - r1.id),
+          onTextCandidateClicked: () => this.sendTextToCandidate(candidate.id),
         };
       });
 
@@ -57,6 +58,14 @@ class CandidatesPanel extends Component {
     } else {
       this.setState({ expandedCandidate: candidate });
     }
+  }
+
+  sendTextToCandidate(candidateId) {
+    console.log("text sent to candidate ", candidateId);
+    axios({
+      method: "get",
+      url: `http://localhost:8000/api/smsnotify/${candidateId}`,
+    });
   }
 
   render() {
