@@ -17,11 +17,13 @@ import theme from "./theme";
 import Toolbar from "@material-ui/core/Toolbar";
 import Container from "@material-ui/core/Container";
 import { ThemeProvider } from "@material-ui/core/styles";
+import CssBaseline from "@material-ui/core/CssBaseline";
 
 class App extends React.Component {
   render() {
     return (
       <ThemeProvider theme={theme}>
+        <CssBaseline />
         <Container>
           <Header company="Company Name" loggedIn={!this.props.location.pathname.endsWith("login")} />
           <Toolbar />

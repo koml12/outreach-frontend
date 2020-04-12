@@ -7,14 +7,18 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import RegisteredEvents from "./RegisteredEvents";
 import ResumeInfo from "../ResumeInfo";
+import TextSentConfirmation from "../TextSentConfirmation";
 
 class CandidateDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
       resume: null,
+      showSnackbar: false,
     };
     this.getResume = this.getResume.bind(this);
+    this.handleTextClicked = this.handleTextClicked.bind(this);
+    this.handleSnackbarClose = this.handleSnackbarClose.bind(this);
   }
 
   componentDidMount() {
@@ -45,6 +49,15 @@ class CandidateDetail extends Component {
     });
   }
 
+  handleTextClicked() {
+    this.props.onTextCandidateClicked();
+    this.setState({ showSnackbar: true });
+  }
+
+  handleSnackbarClose() {
+    this.setState({ showSnackbar: false });
+  }
+
   render() {
     return (
       <Grid container spacing={2}>
@@ -59,7 +72,7 @@ class CandidateDetail extends Component {
         </Grid>
 
         <Grid item xs={2}>
-          <Button variant="outlined" color="primary">
+          <Button variant="outlined" color="primary" onClick={this.handleTextClicked}>
             Text Candidate
           </Button>
         </Grid>
@@ -67,6 +80,7 @@ class CandidateDetail extends Component {
         <Grid item xs={12}>
           <RegisteredEvents registrations={this.props.registrations} />
         </Grid>
+        <TextSentConfirmation open={this.state.showSnackbar} onClose={this.handleSnackbarClose} />
       </Grid>
     );
   }

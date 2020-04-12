@@ -14,6 +14,7 @@ import { getToken } from "../../../../../utils/utils";
 import CandidateQuestionResponses from "./CandidateQuestionResponses";
 import EvaluatorQuestionResponses from "./EvaluatorQuestionResponses";
 import ResumeInfo from "../ResumeInfo";
+import TextSentConfirmation from "../TextSentConfirmation";
 
 class RegisteredCandidateDetail extends Component {
   constructor(props) {
@@ -28,10 +29,13 @@ class RegisteredCandidateDetail extends Component {
         candidate: props.candidate,
       },
       resume: null,
+      showSnackbar: false,
     };
     this.getAvailableGroups = this.getAvailableGroups.bind(this);
     this.getResume = this.getResume.bind(this);
     this.onGroupSelect = this.onGroupSelect.bind(this);
+    this.sendTextToCandidate = this.sendTextToCandidate.bind(this);
+    this.handleSnackbarClose = this.handleSnackbarClose.bind(this);
   }
 
   componentDidMount() {
@@ -79,6 +83,18 @@ class RegisteredCandidateDetail extends Component {
     });
   }
 
+  sendTextToCandidate() {
+    axios({
+      method: "get",
+      url: `http://localhost:8000/api/smsnotify/${this.props.candidate.id}`,
+    });
+    this.setState({ showSnackbar: true });
+  }
+
+  handleSnackbarClose() {
+    this.setState({ showSnackbar: false });
+  }
+
   render() {
     return (
       <Grid container spacing={2}>
@@ -104,7 +120,7 @@ class RegisteredCandidateDetail extends Component {
         </Grid>
 
         <Grid item xs={2}>
-          <Button variant="outlined" color="primary">
+          <Button variant="outlined" color="primary" onClick={this.sendTextToCandidate}>
             Text Candidate
           </Button>
         </Grid>
@@ -120,6 +136,7 @@ class RegisteredCandidateDetail extends Component {
           <EvaluatorQuestionResponses />
         </Grid>
         <Grid item xs={1} />
+        <TextSentConfirmation open={this.state.showSnackbar} onClose={this.handleSnackbarClose} />
       </Grid>
     );
   }
