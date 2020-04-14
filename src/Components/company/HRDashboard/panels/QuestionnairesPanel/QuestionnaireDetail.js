@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 
-import axios from "axios";
 import IconButton from "@material-ui/core/IconButton";
 import ArrowBackTwoToneIcon from "@material-ui/icons/ArrowBackTwoTone";
 
