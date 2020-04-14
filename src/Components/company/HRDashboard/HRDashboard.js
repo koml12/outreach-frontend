@@ -5,15 +5,7 @@ import Tab from "@material-ui/core/Tab";
 import Box from "@material-ui/core/Box";
 
 import TabPanel from "./TabPanel";
-import {
-  CandidatesPanel,
-  EventsPanel,
-  GroupsPanel,
-  JobsPanel,
-  QuestionnairesPanel,
-  RankingsPanel,
-  AnalyticsPanel,
-} from "./panels";
+import { CandidatesPanel, EventsPanel, GroupsPanel, JobsPanel, QuestionnairesPanel } from "./panels";
 
 const TabNames = {
   CANDIDATES: 0,
@@ -21,8 +13,6 @@ const TabNames = {
   GROUPS: 2,
   JOBS: 3,
   QUESTIONNAIRES: 4,
-  RANKINGS: 5,
-  ANALYTICS: 6,
 };
 
 const HRDashboard = () => {
@@ -40,8 +30,6 @@ const HRDashboard = () => {
         <Tab label="Groups" />
         <Tab label="Jobs" />
         <Tab label="Questionnaires" />
-        <Tab label="Rankings" />
-        <Tab label="Analytics" />
       </Tabs>
 
       <Box marginBottom="24px" />
@@ -64,14 +52,6 @@ const HRDashboard = () => {
 
       <TabPanel value={value} index={TabNames.QUESTIONNAIRES}>
         <QuestionnairesPanel />
-      </TabPanel>
-
-      <TabPanel value={value} index={TabNames.RANKINGS}>
-        <RankingsPanel />
-      </TabPanel>
-
-      <TabPanel value={value} index={TabNames.ANALYTICS}>
-        <AnalyticsPanel />
       </TabPanel>
     </div>
   );
