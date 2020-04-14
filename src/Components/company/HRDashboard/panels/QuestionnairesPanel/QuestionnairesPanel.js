@@ -4,6 +4,7 @@ import axios from "axios";
 import Grid from "@material-ui/core/Grid";
 
 import QuestionnaireCard from "./QuestionnaireCard";
+import QuestionnaireDetail from "./QuestionnaireDetail";
 
 export default class QuestionnairesPanel extends Component {
   constructor(props) {
@@ -19,6 +20,8 @@ export default class QuestionnairesPanel extends Component {
     this.getAllQuestionnaires = this.getAllQuestionnaires.bind(this);
     this.getAllSurveys = this.getAllSurveys.bind(this);
     this.getAllEvents = this.getAllEvents.bind(this);
+    this.handleBackButtonClicked = this.handleBackButtonClicked.bind(this);
+    this.handleViewQuestionsClicked = this.handleViewQuestionsClicked.bind(this);
   }
 
   componentDidMount() {
@@ -58,18 +61,36 @@ export default class QuestionnairesPanel extends Component {
 
   getAllEvents() {}
 
+  handleBackButtonClicked() {
+    this.setState({ selectedQuestionnaire: null });
+  }
+
+  handleViewQuestionsClicked(questionnaire) {
+    this.setState({ selectedQuestionnaire: questionnaire });
+  }
+
   render() {
     return (
       <div>
-        <div>
-          <Grid container spacing={2}>
-            {this.state.questionnaires.map((questionnaire) => (
-              <Grid item xs={4}>
-                <QuestionnaireCard {...questionnaire} />
-              </Grid>
-            ))}
-          </Grid>
-        </div>
+        {this.state.selectedQuestionnaire ? (
+          <QuestionnaireDetail
+            questionnaire={this.state.selectedQuestionnaire}
+            onBackClicked={this.handleBackButtonClicked}
+          />
+        ) : (
+          <div>
+            <Grid container spacing={2}>
+              {this.state.questionnaires.map((questionnaire) => (
+                <Grid item xs={4}>
+                  <QuestionnaireCard
+                    {...questionnaire}
+                    onViewDetailsClicked={() => this.handleViewQuestionsClicked(questionnaire)}
+                  />
+                </Grid>
+              ))}
+            </Grid>
+          </div>
+        )}
       </div>
     );
   }

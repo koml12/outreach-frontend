@@ -5,7 +5,6 @@ import CardActions from "@material-ui/core/CardActions";
 import Grid from "@material-ui/core/Grid";
 
 import Typography from "@material-ui/core/Typography";
-import Link from "@material-ui/core/Link";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 
@@ -13,7 +12,7 @@ import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 
 const QuestionnaireCard = (props) => {
-  const { name, type, events, onEditClicked, onDeleteClicked, onViewDetailClicked } = props;
+  const { name, type, events, onEditClicked, onDeleteClicked, onViewDetailsClicked } = props;
 
   return (
     <Card>
@@ -44,7 +43,7 @@ const QuestionnaireCard = (props) => {
       <CardActions>
         <Grid container spacing={0} style={{ marginRight: "7px" }}>
           <Grid item xs={11}>
-            <Button color="primary" onClick={onViewDetailClicked}>
+            <Button color="primary" onClick={onViewDetailsClicked}>
               View Questions
             </Button>
           </Grid>
