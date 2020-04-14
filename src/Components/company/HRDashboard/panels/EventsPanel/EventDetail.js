@@ -5,6 +5,7 @@ import ArrowBackTwoToneIcon from "@material-ui/icons/ArrowBackTwoTone";
 
 import { EventInfo } from "../../../../common/";
 import RegisteredCandidateList from "./RegisteredCandidateList";
+import JobChips from "./JobChips";
 
 export default class EventDetail extends Component {
   constructor(props) {
@@ -20,8 +21,13 @@ export default class EventDetail extends Component {
       eventId: props.event.id,
       registrations: [],
       expandedRegistration: null,
+      jobs: [],
+      selectedJob: null,
     };
     this.handleExpansionChange = this.handleExpansionChange.bind(this);
+    this.getAllJobs = this.getAllJobs.bind(this);
+    this.getCandidatesRankedByJob = this.getCandidatesRankedByJob.bind(this);
+    this.handleJobClicked = this.handleJobClicked.bind(this);
   }
 
   componentDidMount() {
@@ -33,6 +39,33 @@ export default class EventDetail extends Component {
       let registrations = response.data.filter((registration) => registration.event === this.props.event.id);
       this.setState({ registrations });
     });
+    this.getAllJobs();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.selectedJob !== this.props.selectedJob) {
+      this.getAllJobs(this.props.selectedJob);
+    }
+  }
+
+  getAllJobs() {
+    axios({
+      method: "get",
+      url: "http://localhost:8000/api/job/",
+    }).then((response) => {
+      const jobs = response.data;
+      this.setState({ jobs });
+    });
+  }
+
+  getCandidatesRankedByJob(jobId) {
+    // axios({
+    //   method: "get",
+    //   url: `http://localhost:8000/api/registration/?event=${this.props.event.id}${jobId ? `&job=${jobId}` : ""}`,
+    // }).then((response) => {
+    //   const registrations = response.data;
+    //   this.setState({ registrations });
+    // });
   }
 
   handleExpansionChange(registration) {
@@ -45,13 +78,32 @@ export default class EventDetail extends Component {
 
   handleRegistrationChange(registration) {}
 
+  handleJobClicked(jobId) {
+    if (jobId === null) {
+      this.setState({ selectedJob: null });
+      return;
+    }
+    const job = this.state.jobs.find((j) => j.id === jobId);
+    if (job === this.state.selectedJob) {
+      this.setState({ selectedJob: null });
+    } else {
+      this.setState({ selectedJob: job });
+    }
+  }
+
   render() {
     return (
-      <div>
+      <div style={{ padding: "10px" }}>
         <IconButton onClick={this.props.onBackClicked}>
           <ArrowBackTwoToneIcon fontSize="large" />
         </IconButton>
         <EventInfo event={this.state.event} />
+        <JobChips
+          jobs={this.state.jobs}
+          selectedJob={this.state.selectedJob}
+          onJobClicked={this.handleJobClicked}
+          style={{ margin: "5px" }}
+        />
         <RegisteredCandidateList
           registrations={this.state.registrations}
           onRegistrationChange={this.handleRegistrationChange}
