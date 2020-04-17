@@ -137,7 +137,7 @@ const AddEditQuestionnaireModal = (props) => {
       </DialogContent>
       <DialogActions>
         <Button color="primary" onClick={onQuestionnaireSubmitted}>
-          {initialData ? "Update" : "Create"} Group
+          {initialData ? "Update" : "Create"} Questionnaire
         </Button>
       </DialogActions>
     </Dialog>

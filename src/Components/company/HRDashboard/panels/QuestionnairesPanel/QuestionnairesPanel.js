@@ -157,9 +157,7 @@ export default class QuestionnairesPanel extends Component {
       return axios({
         method: "patch",
         url: `http://localhost:8000/api/event/${eventId}/`,
-        data: {
-          [type]: questionnaireId,
-        },
+        data: addData,
         headers: {
           Authorization: `Token ${getToken()}`,
         },
@@ -174,9 +172,7 @@ export default class QuestionnairesPanel extends Component {
         return axios({
           method: "patch",
           url: `http://localhost:8000/api/event/${event.id}/`,
-          data: {
-            [type]: null,
-          },
+          data: removeData,
           headers: {
             Authorization: `Token ${getToken()}`,
           },
@@ -259,9 +255,9 @@ export default class QuestionnairesPanel extends Component {
                 </Grid>
               ))}
             </Grid>
+            <AddButton onClick={this.handleAddQuestionnaireClicked} />
           </div>
         )}
-        <AddButton onClick={this.handleAddQuestionnaireClicked} />
       </div>
     );
   }
