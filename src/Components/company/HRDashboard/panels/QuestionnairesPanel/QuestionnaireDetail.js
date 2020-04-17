@@ -34,13 +34,13 @@ class QuestionnaireDetail extends Component {
   }
 
   componentDidMount() {
-    this.getAllQuestions(this.props.questionnaire.id);
+    this.getAllQuestions(this.props.questionnaire.id, this.props.questionnaire.type);
   }
 
-  getAllQuestions(questionnaireId) {
+  getAllQuestions(questionnaireId, type) {
     axios({
       method: "get",
-      url: `http://localhost:8000/api/questionnaire/${questionnaireId}/`,
+      url: `http://localhost:8000/api/${type}/${questionnaireId}/`,
     }).then((response) => {
       const { questions } = response.data;
       this.setState({ questions });

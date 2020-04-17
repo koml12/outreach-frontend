@@ -11,31 +11,41 @@ const QuestionItem = ({ question, type, onEditClicked, onDeleteClicked }) => {
     <ListItem>
       <Grid container spacing={2}>
         <Grid item xs={10}>
-          <Typography variant="h6">{question.text}</Typography>
+          <Typography variant="h6" display="block" noWrap>
+            {question.text}
+          </Typography>
         </Grid>
         <Grid item xs={2}>
           <EditDeleteButtons onEdit={onEditClicked} onDelete={onDeleteClicked} />
         </Grid>
         {type === "questionnaire" && (
-          <Grid container spacing={2}>
-            <Grid item xs={1} />
-
+          <Grid container spacing={2} style={{ marginLeft: "5px" }}>
             <Grid item xs={2}>
-              <Typography variant="body1">{question.op1}</Typography>
+              <Typography variant="body1" display="block" noWrap>
+                {question.op1}
+              </Typography>
             </Grid>
             <Grid item xs={2}>
-              <Typography variant="body1">{question.op2}</Typography>
+              <Typography variant="body1" display="block" noWrap>
+                {question.op2}
+              </Typography>
             </Grid>
             <Grid item xs={2}>
-              <Typography variant="body1">{question.op3}</Typography>
+              <Typography variant="body1" display="block" noWrap>
+                {question.op3}
+              </Typography>
             </Grid>
             <Grid item xs={2}>
-              <Typography variant="body1">{question.op4}</Typography>
+              <Typography variant="body1" display="block" noWrap>
+                {question.op4}
+              </Typography>
             </Grid>
             <Grid item xs={2}>
-              <Typography variant="body1">{question.op5}</Typography>
+              <Typography variant="body1" display="block" noWrap>
+                {question.op5}
+              </Typography>
             </Grid>
-            <Grid item xs={1} />
+            <Grid item xs={2} />
           </Grid>
         )}
       </Grid>

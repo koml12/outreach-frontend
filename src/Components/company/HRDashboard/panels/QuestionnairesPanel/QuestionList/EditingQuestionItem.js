@@ -15,7 +15,19 @@ const EditingQuestionItem = ({ question, type, onSave, onCancel }) => {
   const [op5, setOp5] = useState(question ? question.op5 : "");
 
   const saveQuestion = () => {
-    onSave({ ...question, text, op1, op2, op3, op4, op5 });
+    if (type === "questionnaire") {
+      onSave({ ...question, text, op1, op2, op3, op4, op5 });
+    } else {
+      onSave({
+        ...question,
+        text,
+        op1: "Poor",
+        op2: "Below Average",
+        op3: "Average",
+        op4: "Above Average",
+        op5: "Excellent",
+      });
+    }
   };
 
   return (
@@ -37,7 +49,7 @@ const EditingQuestionItem = ({ question, type, onSave, onCancel }) => {
         </Grid>
         {type === "questionnaire" && (
           <Grid container spacing={2}>
-            <Grid item xs={1} />
+            <Grid item xs={0} />
 
             <Grid item xs={2}>
               <TextField label="Option 1" value={op1} onChange={(e) => setOp1(e.target.value)} required />
@@ -54,7 +66,7 @@ const EditingQuestionItem = ({ question, type, onSave, onCancel }) => {
             <Grid item xs={2}>
               <TextField label="Option 5" value={op5} onChange={(e) => setOp5(e.target.value)} required />
             </Grid>
-            <Grid item xs={1} />
+            <Grid item xs={2} />
           </Grid>
         )}
       </Grid>

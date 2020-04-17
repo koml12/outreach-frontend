@@ -1,12 +1,20 @@
 import React, { useState } from "react";
 
+import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
 
 import QuestionItem from "./QuestionItem";
 import EditingQuestionItem from "./EditingQuestionItem";
 
+const useStyles = makeStyles({
+  divider: {
+    marginTop: "5px",
+  },
+});
+
 const QuestionList = ({ questions, type, onSave, onDelete, addingQuestion, onAddCancel }) => {
+  const classes = useStyles();
   const [editingQuestions, setEditingQuestions] = useState([]);
 
   const onEdit = (question) => {
@@ -33,7 +41,7 @@ const QuestionList = ({ questions, type, onSave, onDelete, addingQuestion, onAdd
       {questions &&
         questions.map((question) => (
           <div>
-            <Divider />
+            <Divider className={classes.divider} />
             {editingQuestions.includes(question) ? (
               <EditingQuestionItem
                 question={question}
@@ -53,11 +61,11 @@ const QuestionList = ({ questions, type, onSave, onDelete, addingQuestion, onAdd
         ))}
       {addingQuestion && (
         <div>
-          <Divider />
+          <Divider className={classes.divider} />
           <EditingQuestionItem type={type} onSave={saveQuestion} onCancel={onCancel} />
         </div>
       )}
-      <Divider style={{ marginTop: "5px" }} />
+      <Divider className={classes.divider} />
     </List>
   );
 };
