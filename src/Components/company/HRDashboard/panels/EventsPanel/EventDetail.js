@@ -6,6 +6,7 @@ import ArrowBackTwoToneIcon from "@material-ui/icons/ArrowBackTwoTone";
 import { EventInfo } from "../../../../common/";
 import RegisteredCandidateList from "./RegisteredCandidateList";
 import JobChips from "./JobChips";
+import { getToken } from "../../../../../utils/utils";
 
 export default class EventDetail extends Component {
   constructor(props) {
@@ -26,11 +27,27 @@ export default class EventDetail extends Component {
     };
     this.handleExpansionChange = this.handleExpansionChange.bind(this);
     this.getAllJobs = this.getAllJobs.bind(this);
+    this.getAllRegistrations = this.getAllRegistrations.bind(this);
     this.getCandidatesRankedByJob = this.getCandidatesRankedByJob.bind(this);
     this.handleJobClicked = this.handleJobClicked.bind(this);
   }
 
   componentDidMount() {
+    this.getAllRegistrations();
+    this.getAllJobs();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.selectedJob !== this.state.selectedJob) {
+      if (this.state.selectedJob) {
+        this.getCandidatesRankedByJob(this.state.selectedJob.id);
+      } else {
+        this.getAllRegistrations();
+      }
+    }
+  }
+
+  getAllRegistrations() {
     axios({
       method: "get",
       url: `http://localhost:8000/api/registration/`,
@@ -39,13 +56,6 @@ export default class EventDetail extends Component {
       let registrations = response.data.filter((registration) => registration.event === this.props.event.id);
       this.setState({ registrations });
     });
-    this.getAllJobs();
-  }
-
-  componentDidUpdate(prevProps) {
-    if (prevProps.selectedJob !== this.props.selectedJob) {
-      this.getAllJobs(this.props.selectedJob);
-    }
   }
 
   getAllJobs() {
@@ -59,13 +69,20 @@ export default class EventDetail extends Component {
   }
 
   getCandidatesRankedByJob(jobId) {
-    // axios({
-    //   method: "get",
-    //   url: `http://localhost:8000/api/registration/?event=${this.props.event.id}${jobId ? `&job=${jobId}` : ""}`,
-    // }).then((response) => {
-    //   const registrations = response.data;
-    //   this.setState({ registrations });
-    // });
+    axios({
+      method: "post",
+      url: "http://localhost:8000/api/ranking/",
+      data: {
+        event: this.props.event.id,
+        job: jobId,
+      },
+      headers: {
+        Authorization: `Token ${getToken()}`,
+      },
+    }).then((response) => {
+      const registrations = response.data;
+      this.setState({ registrations });
+    });
   }
 
   handleExpansionChange(registration) {
