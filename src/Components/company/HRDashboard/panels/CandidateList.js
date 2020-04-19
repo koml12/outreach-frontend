@@ -16,7 +16,11 @@ const CandidateList = (props) => {
     <Grid item xs={12}>
       {candidates.map((candidate, index) => {
         return (
-          <ExpansionPanel expanded={expandedCandidate === candidate} onChange={() => onExpandedChange(candidate)}>
+          <ExpansionPanel
+            expanded={expandedCandidate === candidate}
+            onChange={() => onExpandedChange(candidate)}
+            key={`candidate-${candidate.id}`}
+          >
             <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
               <Grid container spacing={2}>
                 <Grid item xs={4}>
