@@ -7,7 +7,7 @@ const JobChips = (props) => {
   const { jobs, selectedJob, onJobClicked } = props;
 
   return (
-    <div style={{ textAlign: "center", padding: "10px" }}>
+    <div style={{ textAlign: "center", paddingTop: "20px", paddingBottom: "10px" }}>
       <div style={{ display: "inline-block" }}>
         <Typography variant="h6">Best Fit Ranking For:</Typography>
         {jobs.map((job) => (
@@ -18,6 +18,7 @@ const JobChips = (props) => {
             variant={job === selectedJob ? "default" : "outlined"}
             color={job === selectedJob ? "primary" : "default"}
             style={{ margin: "5px" }}
+            key={`job-${job.id}`}
           />
         ))}
       </div>

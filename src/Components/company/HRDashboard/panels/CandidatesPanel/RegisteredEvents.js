@@ -14,7 +14,11 @@ const RegisteredEvents = (props) => {
         {registrations &&
           registrations.length > 0 &&
           registrations.map((registration) => (
-            <CandidateEventInfo event={registration.event} group={registration.group} />
+            <CandidateEventInfo
+              event={registration.event}
+              group={registration.group}
+              key={`registered-event-${registration.id}`}
+            />
           ))}
         {(!registrations || registrations.length === 0) && (
           <Typography variant="h6">This candidate hasn't registered for any events yet</Typography>

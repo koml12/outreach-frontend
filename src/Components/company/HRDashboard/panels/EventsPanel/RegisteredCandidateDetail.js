@@ -28,11 +28,15 @@ class RegisteredCandidateDetail extends Component {
         event: props.event,
         candidate: props.candidate,
       },
+      evaluator: null,
       resume: null,
+      questionnaireAnswers: [],
+      surveyAnswers: [],
       showSnackbar: false,
     };
     this.getAvailableGroups = this.getAvailableGroups.bind(this);
     this.getResume = this.getResume.bind(this);
+    this.getSavedAnswers = this.getSavedAnswers.bind(this);
     this.onGroupSelect = this.onGroupSelect.bind(this);
     this.sendTextToCandidate = this.sendTextToCandidate.bind(this);
     this.handleSnackbarClose = this.handleSnackbarClose.bind(this);
@@ -43,6 +47,12 @@ class RegisteredCandidateDetail extends Component {
     this.getResume(this.props.resume);
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps !== this.props) {
+      this.getAvailableGroups();
+    }
+  }
+
   getAvailableGroups() {
     axios({
       method: "get",
@@ -50,6 +60,10 @@ class RegisteredCandidateDetail extends Component {
     }).then((response) => {
       const groups = response.data;
       this.setState({ groups });
+      if (this.props.group) {
+        const evaluator = groups.find((g) => g.id === this.props.group).evaluator;
+        this.getSavedAnswers(evaluator);
+      }
     });
   }
 
@@ -66,6 +80,37 @@ class RegisteredCandidateDetail extends Component {
     });
   }
 
+  getSavedAnswers(evaluatorId) {
+    axios({
+      method: "get",
+      url: "http://localhost:8000/api/answer/",
+    }).then((response) => {
+      const questionnaireId = this.props.event.questionnaire;
+      const surveyId = this.props.event.survey;
+      const candidateId = this.props.candidate.id;
+      if (questionnaireId) {
+        const questionnaireAnswers = response.data.filter((ans) => {
+          return (
+            ans.question.questionnaire === questionnaireId && ans.candidate === candidateId && ans.evaluator === null
+          );
+        });
+
+        console.log(questionnaireId, candidateId, evaluatorId, questionnaireAnswers);
+
+        this.setState({ questionnaireAnswers });
+      }
+
+      if (surveyId) {
+        const surveyAnswers = response.data.filter((ans) => {
+          return (
+            ans.question.questionnaire === surveyId && ans.candidate === candidateId && ans.evaluator === evaluatorId
+          );
+        });
+        this.setState({ surveyAnswers });
+      }
+    });
+  }
+
   onGroupSelect(event) {
     axios({
       method: "patch",
@@ -79,7 +124,8 @@ class RegisteredCandidateDetail extends Component {
         ...this.state.registration,
         group: event.target.value,
       };
-      this.setState({ registration });
+      let evaluator = this.state.groups.find((g) => g.id === event.target.value).evaluator;
+      this.setState({ registration, evaluator });
     });
   }
 
@@ -98,18 +144,23 @@ class RegisteredCandidateDetail extends Component {
   render() {
     return (
       <Grid container spacing={2}>
-        <Grid item xs={4}>
+        <Grid item xs={6}>
           <FormControl style={{ minWidth: "240px" }}>
             <InputLabel>Group</InputLabel>
-            <Select defaultValue={this.state.registration.group} onChange={this.onGroupSelect}>
+            <Select
+              value={this.state.registration.group ? this.state.registration.group : ""}
+              onChange={this.onGroupSelect}
+            >
               {this.state.groups.map((group) => (
-                <MenuItem value={group.id}>{`Group ${group.id}`}</MenuItem>
+                <MenuItem value={group.id} key={`registration-${this.props.id}-group-${group.id}`}>
+                  {group.name}
+                </MenuItem>
               ))}
             </Select>
           </FormControl>
         </Grid>
 
-        <Grid item xs={6}>
+        <Grid item xs={4}>
           {this.state.resume === null ? (
             <Typography variant="body1" color="error">
               No resume uploaded yet
@@ -128,14 +179,16 @@ class RegisteredCandidateDetail extends Component {
         <Grid item xs={12} />
 
         <Grid item xs={5}>
-          <CandidateQuestionResponses />
+          <CandidateQuestionResponses savedAnswers={this.state.questionnaireAnswers} />
         </Grid>
+
         <Grid item xs={1} />
 
         <Grid item xs={5}>
-          <EvaluatorQuestionResponses />
+          <EvaluatorQuestionResponses savedAnswers={this.state.surveyAnswers} />
         </Grid>
         <Grid item xs={1} />
+
         <TextSentConfirmation open={this.state.showSnackbar} onClose={this.handleSnackbarClose} />
       </Grid>
     );

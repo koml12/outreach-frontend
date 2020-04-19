@@ -4,7 +4,7 @@ import CandidateList from "../CandidateList";
 import RegisteredCandidateDetail from "./RegisteredCandidateDetail";
 
 const RegisteredCandidateList = (props) => {
-  const { registrations, onRegistrationChange } = props;
+  const { registrations, onRegistrationChange, event } = props;
 
   const [expandedCandidate, setExpandedCandidate] = useState(null);
 
@@ -23,7 +23,9 @@ const RegisteredCandidateList = (props) => {
       candidates={candidates}
       expandedCandidate={expandedCandidate}
       detailComponent={RegisteredCandidateDetail}
-      details={registrations}
+      details={registrations.map((registration) => {
+        return { ...registration, event };
+      })}
       detailDataName="registration"
       onDetailDataChange={onRegistrationChange}
       onExpandedChange={onCandidateExpandedChange}

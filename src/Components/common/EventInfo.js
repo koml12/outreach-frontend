@@ -2,9 +2,9 @@ import React from "react";
 import Typography from "@material-ui/core/Typography";
 import { generateDateString } from "../../utils/utils";
 
-const EventInfo = props => (
+const EventInfo = (props) => (
   <div>
-    <Typography variant="h3" align="center">
+    <Typography variant="h4" align="center">
       {props.event.name}
     </Typography>
     <Typography variant="h5" align="center">

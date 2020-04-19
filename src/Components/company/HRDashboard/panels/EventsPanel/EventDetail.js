@@ -6,6 +6,7 @@ import ArrowBackTwoToneIcon from "@material-ui/icons/ArrowBackTwoTone";
 import { EventInfo } from "../../../../common/";
 import RegisteredCandidateList from "./RegisteredCandidateList";
 import JobChips from "./JobChips";
+import QuestionnaireSelects from "./QuestionnaireSelects";
 import { getToken } from "../../../../../utils/utils";
 
 export default class EventDetail extends Component {
@@ -18,23 +19,33 @@ export default class EventDetail extends Component {
         description: props.event["Description"],
         startDatetime: props.event["Start Time"],
         endDatetime: props.event["End Time"],
+        questionnaire: props.event["questionnaire"],
+        survey: props.event["survey"],
       },
       eventId: props.event.id,
       registrations: [],
       expandedRegistration: null,
       jobs: [],
+      questionnaires: [],
+      surveys: [],
       selectedJob: null,
     };
     this.handleExpansionChange = this.handleExpansionChange.bind(this);
     this.getAllJobs = this.getAllJobs.bind(this);
     this.getAllRegistrations = this.getAllRegistrations.bind(this);
     this.getCandidatesRankedByJob = this.getCandidatesRankedByJob.bind(this);
+    this.getAllQuestionnaires = this.getAllQuestionnaires.bind(this);
+    this.getAllSurveys = this.getAllSurveys.bind(this);
     this.handleJobClicked = this.handleJobClicked.bind(this);
+    this.handleQuestionnaireChanged = this.handleQuestionnaireChanged.bind(this);
+    this.handleSurveyChanged = this.handleSurveyChanged.bind(this);
   }
 
   componentDidMount() {
     this.getAllRegistrations();
     this.getAllJobs();
+    this.getAllQuestionnaires();
+    this.getAllSurveys();
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -85,6 +96,30 @@ export default class EventDetail extends Component {
     });
   }
 
+  getAllQuestionnaires() {
+    axios({
+      method: "get",
+      url: "http://localhost:8000/api/questionnaire/",
+    }).then((response) => {
+      const questionnaires = response.data.map((questionnaire) => {
+        return { ...questionnaire, type: "questionnaire" };
+      });
+      this.setState({ questionnaires });
+    });
+  }
+
+  getAllSurveys() {
+    axios({
+      method: "get",
+      url: "http://localhost:8000/api/survey/",
+    }).then((response) => {
+      const surveys = response.data.map((survey) => {
+        return { ...survey, type: "survey" };
+      });
+      this.setState({ surveys });
+    });
+  }
+
   handleExpansionChange(registration) {
     let expandedRegistration = null;
     if (this.state.expandedRegistration !== registration) {
@@ -108,6 +143,38 @@ export default class EventDetail extends Component {
     }
   }
 
+  handleQuestionnaireChanged(questionnaireId) {
+    axios({
+      method: "patch",
+      url: `http://localhost:8000/api/event/${this.props.event.id}/`,
+      data: {
+        questionnaire: questionnaireId,
+      },
+      headers: {
+        Authorization: `Token ${getToken()}`,
+      },
+    }).then(() => {
+      const event = { ...this.state.event, questionnaire: questionnaireId };
+      this.setState({ event });
+    });
+  }
+
+  handleSurveyChanged(surveyId) {
+    axios({
+      method: "patch",
+      url: `http://localhost:8000/api/event/${this.props.event.id}/`,
+      data: {
+        survey: surveyId,
+      },
+      headers: {
+        Authorization: `Token ${getToken()}`,
+      },
+    }).then(() => {
+      const event = { ...this.state.event, survey: surveyId };
+      this.setState({ event });
+    });
+  }
+
   render() {
     return (
       <div style={{ padding: "10px" }}>
@@ -115,6 +182,14 @@ export default class EventDetail extends Component {
           <ArrowBackTwoToneIcon fontSize="large" />
         </IconButton>
         <EventInfo event={this.state.event} />
+        <QuestionnaireSelects
+          questionnaires={this.state.questionnaires}
+          surveys={this.state.surveys}
+          selectedQuestionnaire={this.state.event.questionnaire}
+          selectedSurvey={this.state.event.survey}
+          onQuestionnaireChange={this.handleQuestionnaireChanged}
+          onSurveyChange={this.handleSurveyChanged}
+        />
         <JobChips
           jobs={this.state.jobs}
           selectedJob={this.state.selectedJob}
@@ -124,6 +199,7 @@ export default class EventDetail extends Component {
         <RegisteredCandidateList
           registrations={this.state.registrations}
           onRegistrationChange={this.handleRegistrationChange}
+          event={this.state.event}
         />
       </div>
     );
