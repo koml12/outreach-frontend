@@ -16,6 +16,7 @@ import theme from "./theme";
 
 import Toolbar from "@material-ui/core/Toolbar";
 import Container from "@material-ui/core/Container";
+import "survey-react/survey.css";
 import { ThemeProvider } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 

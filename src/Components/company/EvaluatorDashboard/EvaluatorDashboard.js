@@ -11,7 +11,7 @@ export default class EvaluatorDashboard extends Component {
     super(props);
     this.state = {
       events: null,
-      clickedEventId: null
+      clickedEventId: null,
     };
     this.handleEventClicked = this.handleEventClicked.bind(this);
   }
@@ -23,15 +23,20 @@ export default class EvaluatorDashboard extends Component {
   componentDidMount() {
     axios({
       method: "get",
-      url: `http://localhost:8000/api/group/?evaluator=${getUserId()}`
-    }).then(response => {
-      let events = response.data
-        .map(group => group.event)
+      url: `http://localhost:8000/api/group/?evaluator=${getUserId()}`,
+    }).then((response) => {
+      let eventIds = response.data
+        .map((group) => group.event)
         .filter((value, index, self) => {
           return self.indexOf(value) === index;
         });
-      this.setState({ events });
-      console.log(events);
+      axios({
+        method: "get",
+        url: "http://localhost:8000/api/event/",
+      }).then((response) => {
+        const events = response.data.filter((event) => eventIds.includes(event.id));
+        this.setState({ events });
+      });
     });
   }
 
@@ -43,7 +48,7 @@ export default class EvaluatorDashboard extends Component {
           <p>Loading Events</p>
         ) : (
           <Grid container spacing={2}>
-            {this.state.events.map(event => (
+            {this.state.events.map((event) => (
               <EventCard
                 title={event["Event Name"]}
                 description={event["Description"]}

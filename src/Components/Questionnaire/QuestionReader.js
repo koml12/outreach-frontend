@@ -8,7 +8,8 @@ function getFromApi(typeOfData, id) {
   var Http = new XMLHttpRequest();
   let url = "";
   if (typeOfData === "question") {
-    url = "http://localhost:8000/api/" + typeOfData + "/" + id + "/?format=json";
+    url = "http://localhost:8000/api/question/" + id + "/?format=json";
+    console.log(url);
     Http.open("GET", url, false);
     Http.send(null);
     return JSON.parse(Http.responseText);
@@ -37,8 +38,8 @@ function extractQuestions(typeOfData, eventID) {
   //jsonObject.questions;
 
   for (var i = 0; i < jsonObject.questions.length; i++) {
-    var questionObj = getFromApi("question", jsonObject.questions[i]);
-    var questionId = questionObj.id;
+    var questionObj = jsonObject.questions[i];
+    var questionId = questionObj.id + "";
     var answers = [questionObj.op1, questionObj.op2, questionObj.op3, questionObj.op4, questionObj.op5];
 
     let q = new Question(questionObj.text, answers, questionId);
@@ -50,9 +51,10 @@ function jsonifyQuestions() {
   var jsonArray = [];
 
   for (var i = 0; i < questionCollection.length; i++) {
+    console.log(questionCollection[i]);
     var temp = {
       type: "radiogroup",
-      name: "" + questionCollection[i].questionId,
+      name: questionCollection[i].questionId,
       title: questionCollection[i].questionText,
       isRequired: true,
       colCount: 5,
