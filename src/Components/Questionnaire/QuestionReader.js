@@ -8,7 +8,8 @@ function getFromApi(typeOfData, id) {
   var Http = new XMLHttpRequest();
   let url = "";
   if (typeOfData === "question") {
-    url = "http://localhost:8000/api/" + typeOfData + "/" + id + "/?format=json";
+    url = "http://localhost:8000/api/question/" + id + "/?format=json";
+    console.log(url);
     Http.open("GET", url, false);
     Http.send(null);
     return JSON.parse(Http.responseText);
@@ -38,8 +39,8 @@ function extractQuestions(typeOfData, eventID) {
   //jsonObject.questions;
   let questionList = [];
   for (var i = 0; i < jsonObject.questions.length; i++) {
-    var questionObj = getFromApi("question", jsonObject.questions[i]);
-    var questionId = questionObj.questionId;
+    var questionObj = jsonObject.questions[i];
+    var questionId = questionObj.id + "";
     var answers = [questionObj.op1, questionObj.op2, questionObj.op3, questionObj.op4, questionObj.op5];
 
     let q = new Question(questionObj.text, answers, questionId);
@@ -51,13 +52,14 @@ function extractQuestions(typeOfData, eventID) {
 function jsonifyQuestions() {
   var jsonArray = [];
   for (var i = 0; i < questionCollection.length; i++) {
+    console.log(questionCollection[i]);
     var temp = {
       type: "radiogroup",
-      name: "q" + (i + 1),
+      name: questionCollection[i].questionId,
       title: questionCollection[i].questionText,
       isRequired: true,
       colCount: 5,
-      choices: questionCollection[i].answerArray
+      choices: questionCollection[i].answerArray,
     };
     jsonArray = jsonArray.concat(temp);
   }
@@ -68,4 +70,4 @@ function getQuestions() {
   return questionCollection;
 }
 
-export { getQuestionnaire, getSurveys, getQuestions };
+export { getQuestionnaire, getSurveys, getQuestions, getFromApi };

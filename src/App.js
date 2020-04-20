@@ -14,7 +14,6 @@ import EvaluatorSurvey from "./components/company/EvaluatorSurvey";
 
 import Toolbar from "@material-ui/core/Toolbar";
 import Container from "@material-ui/core/Container";
-import * as Survey from "survey-react";
 import "survey-react/survey.css";
 
 class App extends React.Component {
