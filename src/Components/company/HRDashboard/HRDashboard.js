@@ -2,24 +2,17 @@ import React, { useState } from "react";
 
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
+import Box from "@material-ui/core/Box";
 
 import TabPanel from "./TabPanel";
-import {
-  CandidatesPanel,
-  EventsPanel,
-  GroupsPanel,
-  QuestionnairesPanel,
-  RankingsPanel,
-  AnalyticsPanel
-} from "./panels";
+import { CandidatesPanel, EventsPanel, GroupsPanel, JobsPanel, QuestionnairesPanel } from "./panels";
 
 const TabNames = {
   CANDIDATES: 0,
   EVENTS: 1,
   GROUPS: 2,
-  QUESTIONNAIRES: 3,
-  RANKINGS: 4,
-  ANALYTICS: 5
+  JOBS: 3,
+  QUESTIONNAIRES: 4,
 };
 
 const HRDashboard = () => {
@@ -35,10 +28,11 @@ const HRDashboard = () => {
         <Tab label="Candidates" />
         <Tab label="Events" />
         <Tab label="Groups" />
+        <Tab label="Jobs" />
         <Tab label="Questionnaires" />
-        <Tab label="Rankings" />
-        <Tab label="Analytics" />
       </Tabs>
+
+      <Box marginBottom="24px" />
 
       <TabPanel value={value} index={TabNames.CANDIDATES}>
         <CandidatesPanel />
@@ -52,16 +46,12 @@ const HRDashboard = () => {
         <GroupsPanel />
       </TabPanel>
 
+      <TabPanel value={value} index={TabNames.JOBS}>
+        <JobsPanel />
+      </TabPanel>
+
       <TabPanel value={value} index={TabNames.QUESTIONNAIRES}>
         <QuestionnairesPanel />
-      </TabPanel>
-
-      <TabPanel value={value} index={TabNames.RANKINGS}>
-        <RankingsPanel />
-      </TabPanel>
-
-      <TabPanel value={value} index={TabNames.ANALYTICS}>
-        <AnalyticsPanel />
       </TabPanel>
     </div>
   );

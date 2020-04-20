@@ -35,22 +35,21 @@ function getSurveys(eventID) {
 
 function extractQuestions(typeOfData, eventID) {
   var jsonObject = getFromApi(typeOfData, eventID);
-  console.log(jsonObject);
   //jsonObject.questions;
-  let questionList = [];
+
   for (var i = 0; i < jsonObject.questions.length; i++) {
     var questionObj = jsonObject.questions[i];
     var questionId = questionObj.id + "";
     var answers = [questionObj.op1, questionObj.op2, questionObj.op3, questionObj.op4, questionObj.op5];
 
     let q = new Question(questionObj.text, answers, questionId);
-    questionList.push(q);
+    questionCollection.push(q);
   }
-  questionCollection = questionList;
 }
 
 function jsonifyQuestions() {
   var jsonArray = [];
+
   for (var i = 0; i < questionCollection.length; i++) {
     console.log(questionCollection[i]);
     var temp = {
@@ -65,6 +64,22 @@ function jsonifyQuestions() {
   }
   return jsonArray;
 }
+
+// function jsonifyQuestions() {
+//   var jsonArray = [];
+//   for (var i = 0; i < questionCollection.length; i++) {
+//     var temp = {
+//       type: "radiogroup",
+//       name: "q" + (i + 1),
+//       title: questionCollection[i].questionText,
+//       isRequired: true,
+//       colCount: 5,
+//       choices: questionCollection[i].answerArray
+//     };
+//     jsonArray = jsonArray.concat(temp);
+//   }
+//   return jsonArray;
+// }
 
 function getQuestions() {
   return questionCollection;

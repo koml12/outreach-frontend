@@ -12,14 +12,19 @@ import CompanyDashboard from "./components/company/CompanyDashboard";
 import EvaluatorDashboard from "./components/company/EvaluatorDashboard";
 import EvaluatorSurvey from "./components/company/EvaluatorSurvey";
 
+import theme from "./theme";
+
 import Toolbar from "@material-ui/core/Toolbar";
 import Container from "@material-ui/core/Container";
 import "survey-react/survey.css";
+import { ThemeProvider } from "@material-ui/core/styles";
+import CssBaseline from "@material-ui/core/CssBaseline";
 
 class App extends React.Component {
   render() {
     return (
-      <div>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
         <Container>
           <Header company="Company Name" loggedIn={!this.props.location.pathname.endsWith("login")} />
           <Toolbar />
@@ -35,7 +40,7 @@ class App extends React.Component {
           </Switch>
         </Container>
         <Footer />
-      </div>
+      </ThemeProvider>
     );
   }
 }
