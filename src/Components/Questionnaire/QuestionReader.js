@@ -1,6 +1,6 @@
 import Question from "../Questionnaire/Question";
 
-var questionCollection = [];
+//var questionCollection = [];
 const QUESTIONNAIRE = "questionnaire";
 const SURVEY = "survey";
 
@@ -24,30 +24,33 @@ function getFromApi(typeOfData, id) {
 function getQuestionnaire(eventID) {
   //api call to get list of qs
   //debugger;
-  extractQuestions(QUESTIONNAIRE, eventID);
-  return jsonifyQuestions();
+  let questionCollection = extractQuestions(QUESTIONNAIRE, eventID);
+  return jsonifyQuestions(questionCollection);
 }
 
 function getSurveys(eventID) {
-  extractQuestions(SURVEY, eventID);
-  return jsonifyQuestions();
+  let questionCollection = extractQuestions(SURVEY, eventID);
+  return jsonifyQuestions(questionCollection);
 }
 
 function extractQuestions(typeOfData, eventID) {
   var jsonObject = getFromApi(typeOfData, eventID);
   //jsonObject.questions;
-
+  let questionCollection = [];
   for (var i = 0; i < jsonObject.questions.length; i++) {
     var questionObj = jsonObject.questions[i];
     var questionId = questionObj.id + "";
     var answers = [questionObj.op1, questionObj.op2, questionObj.op3, questionObj.op4, questionObj.op5];
 
     let q = new Question(questionObj.text, answers, questionId);
-    questionCollection.push(q);
+    if (!questionCollection.includes(q)) {
+      questionCollection.push(q);
+    }
   }
+  return questionCollection;
 }
 
-function jsonifyQuestions() {
+function jsonifyQuestions(questionCollection) {
   var jsonArray = [];
   for (var i = 0; i < questionCollection.length; i++) {
     console.log(questionCollection[i]);
@@ -65,7 +68,7 @@ function jsonifyQuestions() {
 }
 
 function getQuestions() {
-  return questionCollection;
+  // return questionCollection;
 }
 
 export { getQuestionnaire, getSurveys, getQuestions, getFromApi };
