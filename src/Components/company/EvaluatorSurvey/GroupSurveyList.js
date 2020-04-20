@@ -5,7 +5,7 @@ import CandidateSurveyEntry from "./CandidateSurveyEntry";
 const GroupSurveyList = (props) => {
   return (
     <div>
-      <h2>Group {props.groupId}</h2>
+      <h2>{props.name}</h2>
       {props.candidates.map((candidate) => (
         <CandidateSurveyEntry
           id={candidate.id}

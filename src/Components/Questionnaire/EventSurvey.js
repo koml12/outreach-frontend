@@ -11,7 +11,16 @@ class EventSurvey extends Component {
       eventId: props.eventId,
       candidateId: props.candidateId,
       evaluatorId: sessionStorage.getItem("userId"),
+      questions: [],
     };
+  }
+
+  componentDidMount() {
+    let questions = getSurveys(this.props.eventId);
+    console.log(questions);
+    if (this.state.questions !== questions) {
+      this.setState({ questions });
+    }
   }
 
   onCompleteComponent = (survey) => {
@@ -89,7 +98,7 @@ class EventSurvey extends Component {
     Survey.StylesManager.applyTheme("darkblue");
 
     var json = {
-      questions: getSurveys(this.state.eventId),
+      questions: this.state.questions,
     };
     console.log(json);
 

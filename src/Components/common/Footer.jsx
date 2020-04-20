@@ -2,14 +2,14 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    flexGrow: 1
-  },
+const useStyles = makeStyles((theme) => ({
   footer: {
-    position: "fixed",
-    bottom: 0
-  }
+    // bottom: "0",
+    // height: "10px",
+    // left: "0",
+    // position: "absolute",
+    // width: "100%",
+  },
 }));
 
 const Footer = () => {

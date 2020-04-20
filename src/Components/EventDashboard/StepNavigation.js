@@ -5,23 +5,24 @@ import Divider from "@material-ui/core/Divider";
 
 const useStyles = makeStyles({
   root: {
-    marginTop: "5%"
+    marginTop: "5%",
+    height: "100px",
   },
   divider: {
-    marginBottom: "5%"
+    marginBottom: "5%",
   },
   next: {
-    float: "right"
+    float: "right",
   },
   previous: {
-    float: "left"
+    float: "left",
   },
   finish: {
-    float: "right"
-  }
+    float: "right",
+  },
 });
 
-const StepNavigation = props => {
+const StepNavigation = (props) => {
   const classes = useStyles();
 
   const shouldEnablePreviousButton = () => {

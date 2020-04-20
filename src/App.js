@@ -25,8 +25,8 @@ class App extends React.Component {
     return (
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Container>
-          <Header company="Company Name" loggedIn={!this.props.location.pathname.endsWith("login")} />
+        <Container style={{ minHeight: "calc(100vh - 40px)", marginBottom: "20px" }}>
+          <Header company="Macross, Inc." loggedIn={!this.props.location.pathname.endsWith("login")} />
           <Toolbar />
           <Switch>
             <Route exact path="/" component={CompanyDashboard} />

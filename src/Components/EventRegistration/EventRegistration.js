@@ -17,17 +17,17 @@ class EventRegistration extends Component {
         name: "Loading Event Info...",
         description: "",
         startDatetime: null,
-        endDatetime: null
+        endDatetime: null,
       },
       registrationInfo: {
-        password: dayjs().format("YYYY-MM-DD")
+        password: dayjs().format("YYYY-MM-DD"),
       },
       loginInfo: {
-        password: dayjs().format("YYYY-MM-DD")
+        password: dayjs().format("YYYY-MM-DD"),
       },
       showRegistration: true,
       showErrorMessage: false,
-      isLoggedIn: userIsLoggedIn("Candidate")
+      isLoggedIn: userIsLoggedIn("Candidate"),
     };
     this.handleRegisteredInputChange = this.handleRegisteredInputChange.bind(this);
     this.handleRegisterClicked = this.handleRegisterClicked.bind(this);
@@ -40,7 +40,7 @@ class EventRegistration extends Component {
   componentDidMount() {
     axios
       .get("http://localhost:8000/api/event/" + this.props.match.params.eventId)
-      .then(response => {
+      .then((response) => {
         let { event } = { ...this.state };
         event.name = response.data["Event Name"];
         event.description = response.data["Description"];
@@ -61,10 +61,29 @@ class EventRegistration extends Component {
     axios({
       url: `http://localhost:8000/api/registration/`,
       method: "post",
-      data: this.createRegistrationInfo(this.state.registrationInfo, this.props.match.params.eventId)
-    }).then(response => {
-      this.saveAuthToken(response.data.token, "Candidate", response.data.id);
-      this.setState({ isLoggedIn: true });
+      data: this.createRegistrationInfo(this.state.registrationInfo, this.props.match.params.eventId),
+    }).then((response) => {
+      axios({
+        url: "http://localhost:8000/api/login/",
+        method: "post",
+        data: {
+          username: this.state.registrationInfo.email,
+          password: this.state.registrationInfo.password,
+        },
+      })
+        .then((response2) => {
+          console.log(response2.data);
+          if (response2.status === 200 && response2.data["user_type"] === "Candidate") {
+            this.saveAuthToken(response2.data.token, "Candidate", response2.data.id);
+            this.setState({ isLoggedIn: true });
+          } else {
+            this.setState({ showErrorMessage: true });
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          this.setState({ showErrorMessage: true });
+        });
     });
   }
 
@@ -91,9 +110,9 @@ class EventRegistration extends Component {
     axios({
       url: "http://localhost:8000/api/login/",
       method: "post",
-      data: this.state.loginInfo
+      data: this.state.loginInfo,
     })
-      .then(response => {
+      .then((response) => {
         console.log(response.data);
         if (response.status === 200 && response.data["user_type"] === "Candidate") {
           this.saveAuthToken(response.data.token, "Candidate", response.data.id);
@@ -102,15 +121,15 @@ class EventRegistration extends Component {
           this.setState({ showErrorMessage: true });
         }
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
         this.setState({ showErrorMessage: true });
       });
   }
 
   handleRegistrationSwitch() {
-    this.setState(prevState => ({
-      showRegistration: !prevState.showRegistration
+    this.setState((prevState) => ({
+      showRegistration: !prevState.showRegistration,
     }));
   }
 
