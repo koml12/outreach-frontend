@@ -49,7 +49,6 @@ function extractQuestions(typeOfData, eventID) {
 
 function jsonifyQuestions() {
   var jsonArray = [];
-
   for (var i = 0; i < questionCollection.length; i++) {
     console.log(questionCollection[i]);
     var temp = {
@@ -64,22 +63,6 @@ function jsonifyQuestions() {
   }
   return jsonArray;
 }
-
-// function jsonifyQuestions() {
-//   var jsonArray = [];
-//   for (var i = 0; i < questionCollection.length; i++) {
-//     var temp = {
-//       type: "radiogroup",
-//       name: "q" + (i + 1),
-//       title: questionCollection[i].questionText,
-//       isRequired: true,
-//       colCount: 5,
-//       choices: questionCollection[i].answerArray
-//     };
-//     jsonArray = jsonArray.concat(temp);
-//   }
-//   return jsonArray;
-// }
 
 function getQuestions() {
   return questionCollection;
