@@ -8,8 +8,8 @@ import TabPanel from "./TabPanel";
 import { CandidatesPanel, EventsPanel, GroupsPanel, JobsPanel, QuestionnairesPanel } from "./panels";
 
 const TabNames = {
-  CANDIDATES: 0,
-  EVENTS: 1,
+  CANDIDATES: 1,
+  EVENTS: 0,
   GROUPS: 2,
   JOBS: 3,
   QUESTIONNAIRES: 4,
@@ -25,8 +25,8 @@ const HRDashboard = () => {
   return (
     <div>
       <Tabs indicatorColor="primary" textColor="primary" centered value={value} onChange={handleTabChange}>
-        <Tab label="Candidates" />
         <Tab label="Events" />
+        <Tab label="Candidates" />
         <Tab label="Groups" />
         <Tab label="Jobs" />
         <Tab label="Questionnaires" />
