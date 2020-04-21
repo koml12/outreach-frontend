@@ -7,7 +7,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 import { EventSurvey } from "../../Questionnaire";
 
-const CandidateSurveyEntry = props => (
+const CandidateSurveyEntry = (props) => (
   <ExpansionPanel>
     <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
       <Typography variant="h6" color="textPrimary">
@@ -15,7 +15,7 @@ const CandidateSurveyEntry = props => (
       </Typography>
     </ExpansionPanelSummary>
     <ExpansionPanelDetails>
-      <EventSurvey eventId={props.eventId} />
+      <EventSurvey eventId={props.eventId} candidateId={props.id} />
     </ExpansionPanelDetails>
   </ExpansionPanel>
 );

@@ -16,6 +16,7 @@ import theme from "./theme";
 
 import Toolbar from "@material-ui/core/Toolbar";
 import Container from "@material-ui/core/Container";
+import "survey-react/survey.css";
 import { ThemeProvider } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 
@@ -24,8 +25,8 @@ class App extends React.Component {
     return (
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Container>
-          <Header company="Company Name" loggedIn={!this.props.location.pathname.endsWith("login")} />
+        <Container style={{ minHeight: "calc(100vh - 40px)", marginBottom: "20px" }}>
+          <Header company="Macross, Inc." loggedIn={!this.props.location.pathname.endsWith("login")} />
           <Toolbar />
           <Switch>
             <Route exact path="/" component={CompanyDashboard} />

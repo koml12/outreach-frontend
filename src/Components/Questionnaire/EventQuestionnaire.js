@@ -1,17 +1,17 @@
 import React, { Component } from "react";
-import Question from "../Questionnaire/Question";
-import {getQuestionnaire, getFromApi} from "../Questionnaire/QuestionReader";
+import { getQuestionnaire, getFromApi } from "../Questionnaire/QuestionReader";
 import "survey-react/survey.css";
 import * as Survey from "survey-react";
-import EventDashboard from "../EventDashboard/EventDashboard";
+import Axios from "axios";
+
+import { getUserId } from "../../utils/utils";
 
 class EventQuestionnaire extends Component {
-    constructor(props){
-        super(props)
-        this.state = {
-            eventId: props.match.params.eventId,
-            userId: sessionStorage.getItem("userId"),
-            questions: []
+  constructor(props) {
+    super(props);
+    this.state = {
+      eventId: props.eventId,
+      questions: [],
     };
   }
 
@@ -23,86 +23,83 @@ class EventQuestionnaire extends Component {
     }
   }
 
-  onCompleteComponent = () => {
-    this.props.onComplete();
+  onCompleteComponent = (survey) => {
+    this.setState({
+      isCompleted: true,
+    });
+
+    console.log("Survey results: " + JSON.stringify(survey.data));
+    this.sendToServer(survey.data);
   };
 
-    onCompleteComponent = (survey) =>{
-        this.setState({
-            isCompleted: true
-        })
-
-        console.log("Survey results: " + JSON.stringify(survey.data));
-        this.sendToServer(survey.data);
+  sendToServer = (data) => {
+    console.log(data);
+    var keyArray = Object.keys(data);
+    var answerId = this.parseToAnswerId(keyArray, data);
+    for (var i = 0; i < answerId.length; i++) {
+      var json = {
+        candidate: getUserId(),
+        question: parseInt(keyArray[i]),
+        answer: parseInt(answerId[i]),
+      };
+      this.postAnswerToDb(json);
     }
+  };
 
-    sendToServer = (data) => {
-        var keyArray = Object.keys(data);
-        //var questionObj = getFromApi("question", jsonObject.questions[i]);
-        var answerId = this.parseToAnswerId(keyArray, data);
-        debugger;
-        for(var i = 0; i < answerId.length; i++){
-            var json = {
-                candidate : "" + this.state.userId,
-                evaluator : "",
-                question : "" + keyArray[i],
-                answer : "" + answerId[i]
-            }
-            this.postAnswerToDb(json);
+  postAnswerToDb = (answerJson) => {
+    console.log("answerJson", answerJson);
+    const url = "http://localhost:8000/api/answer/";
+    Axios.post(url, answerJson).then(
+      (response) => {
+        console.log("answer has been saved");
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  };
 
+  parseToAnswerId = (keyArray, data) => {
+    var answerId = [];
+    for (var i = 0; i < keyArray.length; i++) {
+      var questionObj = getFromApi("question", keyArray[i]);
+      for (var j = 0; j < 5; j++) {
+        if (j === 0) {
+          if (data[keyArray[i]] === questionObj.op1) {
+            answerId.push(j);
+            break;
+          }
+        } else if (j === 1) {
+          if (data[keyArray[i]] === questionObj.op2) {
+            answerId.push(j);
+            break;
+          }
+        } else if (j === 2) {
+          if (data[keyArray[i]] === questionObj.op3) {
+            answerId.push(j);
+            break;
+          }
+        } else if (j === 3) {
+          if (data[keyArray[i]] === questionObj.op4) {
+            answerId.push(j);
+            break;
+          }
+        } else if (j === 4) {
+          if (data[keyArray[i]] === questionObj.op5) {
+            answerId.push(j);
+            break;
+          }
         }
-
-        
+      }
     }
+    return answerId;
+  };
 
-    postAnswerToDb = (answerJson) => {
-        var Http = new XMLHttpRequest();
-        const url = 'http://localhost:8000/api/answer/';
-        Http.open("POST", url, false);
-        Http.send(answerJson);
-        console.log("Answer Posted");
-    }
-
-    parseToAnswerId = (keyArray, data) => {
-        var answerId = [];
-        for(var i = 0; i < keyArray.length; i++){
-            var questionObj = getFromApi("question", keyArray[i]);
-            for(var j = 0; j < 5; j++){
-                if(j == 0) {
-                    if(data[keyArray[i]] == questionObj.op1){
-                        answerId.push(j);
-                        break;
-                    }
-                } else if( j == 1) {
-                    if(data[keyArray[i]] == questionObj.op2){
-                        answerId.push(j);
-                        break;
-                    }
-                } else if( j == 2) {
-                    if(data[keyArray[i]] == questionObj.op3){
-                        answerId.push(j);
-                        break;
-                    }
-                } else if( j == 3) {
-                    if(data[keyArray[i]] == questionObj.op4){
-                        answerId.push(j);
-                        break;
-                    }
-                } else if( j == 4) {
-                    if(data[keyArray[i]] == questionObj.op5){
-                        answerId.push(j);
-                        break;
-                    }
-                }
-            }
-        }
-        return answerId;
-    }
   render() {
     Survey.StylesManager.applyTheme("darkblue");
 
     var json = {
-      questions: this.state.questions
+      questions: this.state.questions,
     };
 
     var questionnaireRender = !this.state.isCompleted ? (
